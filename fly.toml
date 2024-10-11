@@ -1,0 +1,23 @@
+# fly.toml app configuration file generated for 2340wrapped on 2024-10-11T01:00:51-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = '2340wrapped'
+primary_region = 'atl'
+
+[build]
+  dockerfile = './Dockerfile'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
