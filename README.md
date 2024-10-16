@@ -12,7 +12,7 @@ Django REST Backend + Vite React Frontend
 ### Setup
 1. Clone the repository
 ```
-git clone github.com/syauger/atl-food-finder.git
+git clone https://github.com/walker-121g/spotify-wrapped.git
 ```
 2. Setup a virtual environment
 ```
