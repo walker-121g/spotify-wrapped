@@ -1,11 +1,13 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
+from wrapped.models import User
 import requests
 import random
 import string
 import os
 import base64
+import jwt
 
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
@@ -29,7 +31,6 @@ def begin_auth(request):
 @csrf_exempt
 def handle_auth_callback(request):
     grant_type = "authorization_code"
-    # base64 SPOTIFY_CLIENT_ID:SPOTIFY_CLIENT_SECRET
     authValue = base64.b64encode(
         f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}".encode("utf-8")
     )
@@ -72,6 +73,9 @@ def handle_auth_callback(request):
             refresh_token,
             max_age=60 * 60 * 24 * 7,
             httponly=True,
+            path="/",
+            domain="localhost:8000",
+            samesite="lax",
         )
 
         response["Location"] = f"http://localhost:5173/login?token={access_token}"
@@ -129,6 +133,26 @@ def get_user(request):
         if "error" in data:
             return JsonResponse({"error": data["error"]}, status=401)
 
-        return JsonResponse(data)
+        try:
+            databaseUser = User.objects.get(email=data["email"])
+        except User.DoesNotExist:
+            databaseUser = None
+            pass
+
+        if not databaseUser:
+            databaseUser = User(email=data["email"], name=data["display_name"])
+            databaseUser.save()
+
+        return JsonResponse(data, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
+def logout(request):
+    if request.method == "GET":
+        response = JsonResponse({"success": True}, status=200)
+        response.delete_cookie("x-wrapped-token")
+        return response
     else:
         return HttpResponse("Invalid request method")

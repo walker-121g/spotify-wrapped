@@ -10,7 +10,7 @@ export const Route = createRootRouteWithContext<{
   notFoundComponent: () => <NotFound />,
   component: () => {
     return (
-      <div>
+      <div className="w-full">
         <Outlet />
         <Toaster position="top-right" />
       </div>

@@ -1,5 +1,4 @@
 import { useAuth } from "@/stores/auth.store";
-import { redirect } from "@tanstack/react-router";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 const BASE_URL = "http://localhost:8000";
@@ -50,13 +49,7 @@ export async function http<T>(
   } catch (error) {
     console.log(error);
 
-    if (error === 401) {
-      useAuth.getState().logout();
-      throw redirect({
-        to: "/login",
-        replace: true,
-      });
-    }
+    useAuth.getState().logout();
 
     throw {
       error: "There was an error making the request",

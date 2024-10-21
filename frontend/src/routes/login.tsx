@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/card";
 import { UnAuthedGuard } from "@/lib/guards";
 import { useAuth } from "@/stores/auth.store";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
@@ -19,17 +20,17 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   let auth = useAuth();
   let searchParams = new URLSearchParams(window.location.search);
+  let token = searchParams.get("token");
+
   if (searchParams.has("error")) {
     toast.error("There was an error logging in. Please try again.");
-  } else if (searchParams.has("token")) {
-    auth.authenticate(searchParams.get("token")!);
-    if (auth.isAuthed) {
-      throw redirect({
-        to: "/",
-        replace: true,
-      });
-    }
   }
+
+  useEffect(() => {
+    if (token) {
+      auth.authenticate(token);
+    }
+  }, []);
 
   return (
     <div className="w-full h-screen flex justify-center items-center p-4">

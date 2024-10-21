@@ -23,4 +23,9 @@ urlpatterns = [
         get_user,
         name="get_user",
     ),
+    path(
+        "api/auth/logout",
+        logout,
+        name="logout",
+    ),
 ]
