@@ -43,7 +43,7 @@ function LoginPage() {
         </CardHeader>
         <CardContent>
           <Button className="w-full" asChild>
-            <a href="http://localhost:8000/api/auth/begin">
+            <a href={`${import.meta.env.VITE_API_URL ?? "http://localhost:8000/api"}/auth/begin`}>
               Continue with Spotify
             </a>
           </Button>
