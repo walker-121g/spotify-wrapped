@@ -23,7 +23,7 @@ function AppLayout() {
   const q = useQuery({
     queryKey: ["context"],
     queryFn: async () => {
-      return await http<any>("GET", "/api/auth/me");
+      return await http<any>("GET", "/auth/me");
     },
     retry: false,
   });

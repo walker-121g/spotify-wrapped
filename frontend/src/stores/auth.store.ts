@@ -22,7 +22,7 @@ export const useAuth = create(
         try {
           const resp = await http<{ access_token: string }>(
             "GET",
-            "/api/auth/token",
+            "/auth/token",
           );
 
           set({ isAuthed: true, token: resp.access_token });
@@ -31,7 +31,7 @@ export const useAuth = create(
         }
       },
       logout: async () => {
-        await http("GET", "/api/auth/logout");
+        await http("GET", "/auth/logout");
         set({ isAuthed: false, token: undefined });
       },
     }),
