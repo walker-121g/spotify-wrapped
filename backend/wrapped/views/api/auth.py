@@ -12,6 +12,7 @@ import jwt
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
 
 
 @csrf_exempt
@@ -38,11 +39,11 @@ def handle_auth_callback(request):
     if request.method == "GET":
         error = request.GET.get("error")
         if error:
-            return redirect(f"http://localhost:5173/login?error={error}")
+            return redirect(f"{FRONTEND_URL}/login?error={error}")
 
         code = request.GET.get("code")
         if not code:
-            return redirect(f"http://localhost:5173/login?error=no_code")
+            return redirect(f"{FRONTEND_URL}login?error=no_code")
 
         headers = {
             "Authorization": f"Basic {authValue.decode('utf-8')}",
@@ -61,7 +62,7 @@ def handle_auth_callback(request):
 
         data = resp.json()
         if "error" in data:
-            return redirect(f"http://localhost:5173/login?error={data['error']}")
+            return redirect(f"{FRONTEND_URL}/login?error={data['error']}")
 
         access_token = data["access_token"]
         refresh_token = data["refresh_token"]
@@ -78,7 +79,7 @@ def handle_auth_callback(request):
             samesite="lax",
         )
 
-        response["Location"] = f"http://localhost:5173/login?token={access_token}"
+        response["Location"] = f"{FRONTEND_URL}/login?token={access_token}"
         return response
     else:
         return HttpResponse("Invalid request method")

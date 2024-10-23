@@ -1,8 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path("", index, name="index"),
     path(
         "api/auth/begin",
         begin_auth,
@@ -28,4 +27,5 @@ urlpatterns = [
         logout,
         name="logout",
     ),
+    re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]

@@ -11,6 +11,9 @@ build-frontend: check-root
 dev-frontend: check-root
 	(cd frontend && pnpm install && pnpm run dev)
 
+lint-frontend: check-root
+	(cd frontend && pnpm install && pnpm run lint)
+
 dev-backend: check-root
 	(cd backend && python manage.py runserver)
 
