@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"pnpm run watch-routes\" \"vite\"",
-    "build": "pnpm run gen-routes && tsc -b && vite build --base=/static/foodfinder/app/",
+    "build": "pnpm run gen-routes && tsc -b && vite build --base=/static/wrapped/app/",
     "lint": "eslint .",
     "preview": "vite preview",
     "gen-routes": "tsr generate",
