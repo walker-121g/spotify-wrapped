@@ -14,7 +14,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_app/")({
   component: DashboardHomePage,
   beforeLoad: async () => {
-    let token = useAuth.getState().token;
+    const token = useAuth.getState().token;
     if (token) {
       return true;
     }
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/_app/")({
 });
 
 function DashboardHomePage() {
-  const user = useContext(s => s.user);
+  const user = useContext((s) => s.user);
 
   return (
     <Card className="w-full mx-auto max-w-md">

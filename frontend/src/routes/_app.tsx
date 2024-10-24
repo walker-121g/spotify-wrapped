@@ -1,7 +1,7 @@
 import { AuthedGuard } from "@/lib/guards";
 import { http } from "@/services/http.service";
 import { useAuth } from "@/stores/auth.store";
-import { useContext } from "@/stores/user.store";
+import { useContext, UserContext } from "@/stores/user.store";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
@@ -23,7 +23,7 @@ function AppLayout() {
   const q = useQuery({
     queryKey: ["context"],
     queryFn: async () => {
-      return await http<any>("GET", "/auth/me");
+      return await http<unknown>("GET", "/auth/me");
     },
     retry: false,
   });
@@ -34,7 +34,7 @@ function AppLayout() {
     useAuth.getState().logout();
   }
 
-  useContext.getState().setUser(q.data);
+  useContext.getState().setUser(q.data as UserContext);
 
   return (
     <div className="grid grid-cols-1 px-6 w-full max-w-6xl mx-auto pb-6">
