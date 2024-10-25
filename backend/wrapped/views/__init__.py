@@ -4,7 +4,8 @@ import pkgutil
 
 def import_submodules(package_name):
     """
-    This is just to recursivley import all the views modules in this folder and its subdirectories
+    This is just to recursivley import all
+    the views modules in this folder and its subdirectories
 
     This allows us to not have to manually import all views
     """

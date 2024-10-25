@@ -1,5 +1,6 @@
 from django.urls import path, re_path
-from .views import *
+from .views import begin_auth, handle_auth_callback
+from .views import get_tokens, get_user, logout, index
 
 urlpatterns = [
     path(
