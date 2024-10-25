@@ -13,7 +13,7 @@ export async function http<T>(
   },
 ): Promise<T> {
   try {
-    let tok = useAuth.getState().token;
+    const tok = useAuth.getState().token;
     const resp = await fetch(`${BASE_URL}${path}`, {
       ...req,
       method: method,
@@ -44,7 +44,7 @@ export async function http<T>(
       }
     }
 
-    let data = await resp.json();
+    const data = await resp.json();
     throw data.error ?? "An unknown error occurred, please try again later";
   } catch (error) {
     console.log(error);

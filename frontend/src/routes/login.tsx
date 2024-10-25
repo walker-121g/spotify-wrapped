@@ -18,9 +18,9 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  let auth = useAuth();
-  let searchParams = new URLSearchParams(window.location.search);
-  let token = searchParams.get("token");
+  const auth = useAuth();
+  const searchParams = new URLSearchParams(window.location.search);
+  const token = searchParams.get("token");
 
   if (searchParams.has("error")) {
     toast.error("There was an error logging in. Please try again.");
@@ -43,7 +43,9 @@ function LoginPage() {
         </CardHeader>
         <CardContent>
           <Button className="w-full" asChild>
-            <a href={`${import.meta.env.VITE_API_URL ?? "http://localhost:8000/api"}/auth/begin`}>
+            <a
+              href={`${import.meta.env.VITE_API_URL ?? "http://localhost:8000/api"}/auth/begin`}
+            >
               Continue with Spotify
             </a>
           </Button>

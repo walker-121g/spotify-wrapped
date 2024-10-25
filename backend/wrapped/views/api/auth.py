@@ -7,7 +7,6 @@ import random
 import string
 import os
 import base64
-import jwt
 
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
@@ -20,10 +19,14 @@ def begin_auth(request):
     if request.method == "GET":
         scope = "user-read-private user-read-email"
         state = "".join(
-            random.choice(string.ascii_uppercase + string.digits) for _ in range(20)
+            random.choice(
+                string.ascii_uppercase + string.digits) for _ in range(20)
         )
 
-        url = f"https://accounts.spotify.com/authorize?client_id={SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri={SPOTIFY_REDIRECT_URI}&scope={scope}&state={state}"
+        url = "https://accounts.spotify.com/authorize?"
+        url = url + f"client_id={SPOTIFY_CLIENT_ID}&response_type=code"
+        url = url + f"&redirect_uri={SPOTIFY_REDIRECT_URI}"
+        url = url + f"&scope={scope}&state={state}"
         return redirect(url)
     else:
         return HttpResponse("Invalid request method")
@@ -57,7 +60,9 @@ def handle_auth_callback(request):
 
         session = requests.Session()
         resp = session.post(
-            "https://accounts.spotify.com/api/token", headers=headers, data=payload
+            "https://accounts.spotify.com/api/token",
+            headers=headers,
+            data=payload
         )
 
         data = resp.json()
@@ -92,6 +97,10 @@ def get_tokens(request):
         if not refresh_token:
             return JsonResponse({"error": "unauthorized"}, status=401)
 
+        authValue = base64.b64encode(
+            f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}".encode("utf-8")
+        )
+
         session = requests.Session()
         headers = {
             "Authorization": f"Basic {authValue.decode('utf-8')}",
@@ -103,7 +112,9 @@ def get_tokens(request):
         }
 
         resp = session.post(
-            "https://accounts.spotify.com/api/token", headers=headers, data=payload
+            "https://accounts.spotify.com/api/token",
+            headers=headers,
+            data=payload
         )
 
         data = resp.json()

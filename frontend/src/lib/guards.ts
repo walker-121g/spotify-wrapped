@@ -1,8 +1,8 @@
 import { redirect } from "@tanstack/react-router";
 
-type Guard = (ctx: { context: { isLoggedIn: boolean } }) => any;
+type Guard = (ctx: { context: { isLoggedIn: boolean } }) => unknown;
 
-const AuthedGuard: Guard = async ctx => {
+const AuthedGuard: Guard = async (ctx) => {
   if (!ctx.context.isLoggedIn) {
     throw redirect({
       to: "/login",
@@ -11,7 +11,7 @@ const AuthedGuard: Guard = async ctx => {
   }
 };
 
-const UnAuthedGuard: Guard = async ctx => {
+const UnAuthedGuard: Guard = async (ctx) => {
   if (ctx.context.isLoggedIn) {
     throw redirect({
       to: "/",
