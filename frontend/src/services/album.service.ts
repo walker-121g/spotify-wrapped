@@ -2,7 +2,7 @@ import SafeError from "@/lib/safe-error";
 import { http } from "./http.service";
 import { logErr } from "@/lib/utils";
 
-async function getUserAlbums(
+export async function getUserAlbums(
     limit: number = 20,
     offset: number = 0 
 ) {
@@ -26,7 +26,7 @@ async function getUserAlbums(
     }
 }
 
-async function getAlbum(id: string) {
+export async function getAlbum(id: string) {
     try {
         const resp = await http(
             "GET",
@@ -47,7 +47,7 @@ async function getAlbum(id: string) {
     } 
 }
 
-async function getAlbums(ids: string[]) {
+export async function getAlbums(ids: string[]) {
     try {
         const resp = await http(
             "GET",
@@ -68,7 +68,7 @@ async function getAlbums(ids: string[]) {
     }
 }
 
-async function getAlbumTracks(id: string) {
+export async function getAlbumTracks(id: string) {
     try {
         const resp = await http(
             "GET",
@@ -89,7 +89,7 @@ async function getAlbumTracks(id: string) {
     }
 }
 
-async function saveAlbums(ids: string[]) {
+export async function saveAlbums(ids: string[]) {
     try {
         const resp = await http(
             "PUT",
@@ -110,7 +110,7 @@ async function saveAlbums(ids: string[]) {
     }
 } 
 
-async function deleteAlbums(ids: string[]) {
+export async function deleteAlbums(ids: string[]) {
     try {
         const resp = await http(
             "DELETE",
@@ -131,7 +131,7 @@ async function deleteAlbums(ids: string[]) {
     }
 }
 
-async function checkIfSaved(ids: string[]) {
+export async function checkIfSaved(ids: string[]) {
     try {
         const resp = await http(
             "GET",
