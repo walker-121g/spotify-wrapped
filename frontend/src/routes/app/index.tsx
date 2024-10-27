@@ -11,7 +11,7 @@ import { useAuth } from "@/stores/auth.store";
 import { useContext } from "@/stores/user.store";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_app/")({
+export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
   beforeLoad: async () => {
     const token = useAuth.getState().token;

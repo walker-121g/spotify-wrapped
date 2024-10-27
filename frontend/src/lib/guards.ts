@@ -14,7 +14,7 @@ const AuthedGuard: Guard = async (ctx) => {
 const UnAuthedGuard: Guard = async (ctx) => {
   if (ctx.context.isLoggedIn) {
     throw redirect({
-      to: "/",
+      to: "/app",
       replace: true,
     });
   }
