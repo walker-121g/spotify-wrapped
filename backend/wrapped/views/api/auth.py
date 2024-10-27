@@ -80,7 +80,7 @@ def handle_auth_callback(request):
             max_age=60 * 60 * 24 * 7,
             httponly=True,
             path="/",
-            domain="localhost:8000",
+            domain=FRONTEND_URL,
             samesite="lax",
         )
 
