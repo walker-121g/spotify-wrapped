@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/stores/auth.store";
 import { useContext } from "@/stores/user.store";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_app/")({
+export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
   beforeLoad: async () => {
     const token = useAuth.getState().token;
@@ -25,16 +25,13 @@ export const Route = createFileRoute("/_app/")({
         return true;
       }
     } catch {
-      throw redirect({
-        to: "/login",
-        replace: true,
-      });
+      useAuth.getState().logout();
     }
   },
 });
 
 function DashboardHomePage() {
-  const user = useContext((s) => s.user);
+  const user = useContext(s => s.user);
 
   return (
     <Card className="w-full mx-auto max-w-md">

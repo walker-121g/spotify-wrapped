@@ -21,3 +21,7 @@ export function randString(length: number = 16) {
 
   return ret;
 }
+
+export function logErr(err: unknown) {
+  return err instanceof Error ? err.message : err;
+}

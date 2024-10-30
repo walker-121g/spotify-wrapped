@@ -1,5 +1,5 @@
 # build output
-backend/foodfinder/static/foodfinder/app
+backend/wrapped/static/wrapped/app
 
 # Logs
 logs

@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseServerError
 from django.shortcuts import redirect
 from wrapped.models import User
 import requests
@@ -7,6 +7,7 @@ import random
 import string
 import os
 import base64
+from datetime import datetime
 
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
@@ -17,10 +18,9 @@ FRONTEND_URL = os.environ.get("FRONTEND_URL")
 @csrf_exempt
 def begin_auth(request):
     if request.method == "GET":
-        scope = "user-read-private user-read-email"
+        scope = "user-read-private user-read-email user-top-read user-read-recently-played playlist-read-private playlist-read-collaborative user-library-read user-read-playback-position user-read-playback-state"
         state = "".join(
-            random.choice(
-                string.ascii_uppercase + string.digits) for _ in range(20)
+            random.choice(string.ascii_uppercase + string.digits) for _ in range(20)
         )
 
         url = "https://accounts.spotify.com/authorize?"
@@ -60,9 +60,7 @@ def handle_auth_callback(request):
 
         session = requests.Session()
         resp = session.post(
-            "https://accounts.spotify.com/api/token",
-            headers=headers,
-            data=payload
+            "https://accounts.spotify.com/api/token", headers=headers, data=payload
         )
 
         data = resp.json()
@@ -71,6 +69,9 @@ def handle_auth_callback(request):
 
         access_token = data["access_token"]
         refresh_token = data["refresh_token"]
+        scope = data["scope"]
+
+        print(f"Granted scopes = {scope}")
 
         # set refresh token in http only cookie
         response = HttpResponse(status=302)
@@ -80,8 +81,8 @@ def handle_auth_callback(request):
             max_age=60 * 60 * 24 * 7,
             httponly=True,
             path="/",
-            domain="localhost:8000",
-            samesite="lax",
+            samesite="None",
+            secure=True,  # most browsers accept the Secure cookie on localhost so no need to change for dev
         )
 
         response["Location"] = f"{FRONTEND_URL}/login?token={access_token}"
@@ -93,7 +94,7 @@ def handle_auth_callback(request):
 @csrf_exempt
 def get_tokens(request):
     if request.method == "GET":
-        refresh_token = request.headers.get("x-wrapped-token")
+        refresh_token = request.COOKIES.get("x-wrapped-token")
         if not refresh_token:
             return JsonResponse({"error": "unauthorized"}, status=401)
 
@@ -112,9 +113,7 @@ def get_tokens(request):
         }
 
         resp = session.post(
-            "https://accounts.spotify.com/api/token",
-            headers=headers,
-            data=payload
+            "https://accounts.spotify.com/api/token", headers=headers, data=payload
         )
 
         data = resp.json()
@@ -140,8 +139,13 @@ def get_user(request):
         }
 
         resp = session.get("https://api.spotify.com/v1/me", headers=headers)
+        try:
+            data = resp.json()
+        except:
+            return JsonResponse(
+                {"error": "Failed to retrieve current user"}, status=resp.status_code
+            )
 
-        data = resp.json()
         if "error" in data:
             return JsonResponse({"error": data["error"]}, status=401)
 
@@ -164,7 +168,15 @@ def get_user(request):
 def logout(request):
     if request.method == "GET":
         response = JsonResponse({"success": True}, status=200)
-        response.delete_cookie("x-wrapped-token")
+        response.set_cookie(
+            "x-wrapped-token",
+            "",
+            max_age=0,
+            httponly=True,
+            path="/",
+            samesite="None",
+            secure=True,  # most browsers accept the Secure cookie on localhost so no need to change for dev
+        )
         return response
     else:
         return HttpResponse("Invalid request method")
