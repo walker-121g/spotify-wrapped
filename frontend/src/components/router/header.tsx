@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Drawer,
   DrawerClose,
@@ -11,9 +12,45 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { 
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/stores/auth.store"; // for the logout i think
+import { useContext } from "@/stores/user.store";
 
 export const Header = () => {
+  const { user, clearUser, setUser } = useContext();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const response = await fetch("/api/spotify/profile/", {
+          method: "GET",
+          credentials: "include", // ensures cookies are included for authentication if needed
+        });
+        if (response.ok) {
+          const profile = await response.json();
+          setUser(profile);
+        } else {
+          console.error("Failed to fetch profile:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, [setUser, user]);
+
   return (
     <header className="absolute w-full flex flex-row justify-between items-center p-6 px-24 border-b">
       <h1 className="text-xl font-bold">Wrapped</h1>
@@ -31,9 +68,32 @@ export const Header = () => {
           <Link href="/contact-us">Contact Us</Link>
         </Button>
       </nav>
-      <Button asChild className="hidden sm:flex">
-        <Link href="/login">Login</Link>
-      </Button>
+
+      {user ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="cursor-pointer">
+              <AvatarImage src={user.images[0]?.url} alt="Profile Picture" />
+              <AvatarFallback>{user.display_name[0]}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48 p-2">
+            <DropdownMenuLabel>{user.display_name}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => {
+              useAuth.getState().logout();
+              clearUser();
+            }}>
+              Log Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button asChild className="hidden sm:flex">
+          <Link href="/login">Login</Link>
+        </Button>
+      )}
+
       <Drawer direction="left">
         <DrawerTrigger asChild className="sm:hidden">
           <Button variant="outline" size="icon">
