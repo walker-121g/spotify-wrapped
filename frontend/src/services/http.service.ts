@@ -12,7 +12,7 @@ export async function http<T>(
     blobResponse?: boolean;
     reAuthed?: boolean;
     omitAuth?: boolean;
-  },
+  }
 ): Promise<T> {
   try {
     const tok = useAuth.getState().token;
@@ -34,38 +34,32 @@ export async function http<T>(
         return await resp.json();
       }
     } else if (resp.status === 401 && !req?.omitAuth) {
-      try {
-        await useAuth.getState().refresh();
-        const newTok = useAuth.getState().token;
-        if (!newTok) {
-          throw 401;
-        }
+      await useAuth.getState().refresh();
+      const newTok = useAuth.getState().token;
+      if (!newTok) {
+        throw 401;
+      }
 
-        const resp = await fetch(`${BASE_URL}${path}`, {
-          ...req,
-          method,
-          headers: {
-            ...(req?.headers || {}),
-            Authorization: `Bearer ${newTok}`,
-          },
-        });
+      const resp = await fetch(`${BASE_URL}${path}`, {
+        ...req,
+        method,
+        headers: {
+          ...(req?.headers || {}),
+          Authorization: `Bearer ${newTok}`,
+        },
+      });
 
-        if (resp.status === 200) {
-          if (req?.textResponse) {
-            return (await resp.text()) as T;
-          } else if (req?.blobResponse) {
-            return (await resp.blob()) as T;
-          } else {
-            return await resp.json();
-          }
+      if (resp.status === 200) {
+        if (req?.textResponse) {
+          return (await resp.text()) as T;
+        } else if (req?.blobResponse) {
+          return (await resp.blob()) as T;
         } else {
-          const data = await resp.json();
-          throw (
-            data.error ?? "An unknown error occurred, please try again later"
-          );
+          return await resp.json();
         }
-      } catch (e) {
-        throw e;
+      } else {
+        const data = await resp.json();
+        throw data.error ?? "An unknown error occurred, please try again later";
       }
     }
 
