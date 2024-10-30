@@ -1,10 +1,8 @@
-import { beforeAll, describe, test, expectTypeOf, expect, afterAll, afterEach } from "vitest";
+import { beforeAll, describe, test, expect, afterAll, afterEach } from "vitest";
 import { render } from "@testing-library/react";
 import {graphql, http as mswHttp, HttpResponse } from "msw";
 import { setupServer } from 'msw/node'
 import { UserContext } from "@/stores/user.store";
-import { http } from '../services/http.service';
-import { useAuth } from '../stores/auth.store';
 
 import {
   useQuery,
