@@ -1,7 +1,8 @@
 import { useAuth } from "@/stores/auth.store";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+export const BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
 export async function http<T>(
   method: Method,
@@ -10,6 +11,7 @@ export async function http<T>(
     textResponse?: boolean;
     blobResponse?: boolean;
     reAuthed?: boolean;
+    omitAuth?: boolean;
   },
 ): Promise<T> {
   try {
@@ -17,6 +19,7 @@ export async function http<T>(
     const resp = await fetch(`${BASE_URL}${path}`, {
       ...req,
       method: method,
+      credentials: "include",
       headers: tok
         ? { ...(req?.headers || {}), Authorization: `Bearer ${tok}` }
         : req?.headers,
@@ -30,29 +33,60 @@ export async function http<T>(
       } else {
         return await resp.json();
       }
-    } else if (resp.status === 401) {
-      if (req?.reAuthed) {
-        throw 401;
-      }
-
-      if (useAuth.getState().token) {
+    } else if (resp.status === 401 && !req?.omitAuth) {
+      try {
         await useAuth.getState().refresh();
-        return await http(method, path, {
+        const newTok = useAuth.getState().token;
+        if (!newTok) {
+          throw 401;
+        }
+
+        const resp = await fetch(`${BASE_URL}${path}`, {
           ...req,
-          reAuthed: true,
+          method,
+          headers: {
+            ...(req?.headers || {}),
+            Authorization: `Bearer ${newTok}`,
+          },
         });
+
+        if (resp.status === 200) {
+          if (req?.textResponse) {
+            return (await resp.text()) as T;
+          } else if (req?.blobResponse) {
+            return (await resp.blob()) as T;
+          } else {
+            return await resp.json();
+          }
+        } else {
+          const data = await resp.json();
+          throw (
+            data.error ?? "An unknown error occurred, please try again later"
+          );
+        }
+      } catch (e) {
+        throw e;
       }
     }
 
     const data = await resp.json();
     throw data.error ?? "An unknown error occurred, please try again later";
   } catch (error) {
-    console.log(error);
-
-    useAuth.getState().logout();
-
-    throw {
-      error: "There was an error making the request",
-    };
+    if (typeof error === "number" && error === 401) {
+      console.log("[http service] caught reattempted auth error, logging out");
+      throw {
+        error: "You are not authenticated, please login again",
+      };
+    } else if (typeof error === "string") {
+      console.log("[http service] caught supplied error:", error);
+      throw {
+        error,
+      };
+    } else {
+      console.log("[http service] caught generic error");
+      throw {
+        error: "An unexpected error occurred, please try again later",
+      };
+    }
   }
 }

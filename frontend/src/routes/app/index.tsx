@@ -25,16 +25,13 @@ export const Route = createFileRoute("/app/")({
         return true;
       }
     } catch {
-      throw redirect({
-        to: "/login",
-        replace: true,
-      });
+      useAuth.getState().logout();
     }
   },
 });
 
 function DashboardHomePage() {
-  const user = useContext((s) => s.user);
+  const user = useContext(s => s.user);
 
   return (
     <Card className="w-full mx-auto max-w-md">
