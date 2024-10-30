@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/stores/auth.store";
 import { useContext } from "@/stores/user.store";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
