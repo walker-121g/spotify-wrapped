@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 
-import { getWraps } from "@/services/wrap.service";
+import { getSharedWraps } from "@/services/wrap.service";
 
 import {
   Card,
@@ -13,11 +13,11 @@ import {
 import { Loader2 } from "lucide-react";
 import { NoWraps } from "./no-wraps";
 
-export const MyWraps = () => {
+export const SharedWraps = () => {
   const router = useRouter();
   const { isLoading, data } = useQuery({
-    queryKey: ["my", "wraps"],
-    queryFn: async () => await getWraps(),
+    queryKey: ["shared", "wraps"],
+    queryFn: async () => await getSharedWraps(),
   });
 
   return isLoading || !data ? (

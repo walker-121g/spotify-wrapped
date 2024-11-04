@@ -183,3 +183,29 @@ def logout(request):
         return response
     else:
         return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
+def delete_account(request):
+    if request.method == "POST":
+        email = request.user_email
+
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User not found"}, status=404)
+
+        response = JsonResponse({"success": True}, status=200)
+        response.set_cookie(
+            "x-wrapped-token",
+            "",
+            max_age=0,
+            httponly=True,
+            path="/",
+            samesite="None",
+            secure=True,
+        )
+        return response
+    else:
+        return HttpResponse("Invalid request method")
