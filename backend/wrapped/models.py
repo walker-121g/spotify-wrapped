@@ -33,22 +33,56 @@ class WrapUser(models.Model):
         return f'{self.user} - {self.wrap}'
 
 
-class WrapAlbum(models.Model):
-    id = models.CharField(max_length=255, primary_key=True)
+class WrapArtist(models.Model):
+    artist = models.CharField(max_length=255)
     wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
     listen_time = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.id}'
+        return f'{self.artist}'
 
 
 class WrapTrack(models.Model):
-    id = models.CharField(max_length=255, primary_key=True)
+    track = models.CharField(max_length=255)
+    wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
     listen_time = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.id}'
+        return f'{self.track}'
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.title}'
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.content}'
+
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.post} - {self.user}'

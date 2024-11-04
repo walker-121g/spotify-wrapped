@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { wrapSchema, WrapSchema } from "@/schemas/wrap.schema";
@@ -31,15 +31,20 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2, Trash } from "lucide-react";
+
+import { createWrap, previewWrap } from "@/services/wrap.service";
 
 import VectorImage from "@/assets/undraw_friends.svg";
-import { Loader2, Trash } from "lucide-react";
+import ErrorImage from "@/assets/undraw_error.svg";
 
 export const Route = createFileRoute("/app/wraps/new")({
   component: NewWrapPage,
 });
 
 function NewWrapPage() {
+  const router = useRouter();
+
   const [users, setUsers] = useState<string[]>([]);
   const form = useForm<WrapSchema>({
     resolver: zodResolver(wrapSchema),
@@ -51,11 +56,15 @@ function NewWrapPage() {
     },
   });
 
-  const { isPending, mutate, error } = useMutation({
+  const { isPending, isSuccess, mutate, error } = useMutation({
     mutationKey: ["wraps", "new"],
-    mutationFn: async (data: WrapSchema) => {
-      console.log(data);
-    },
+    mutationFn: async (data: WrapSchema) =>
+      await createWrap({ ...data, users }),
+  });
+
+  const { isLoading, data, isError } = useQuery({
+    queryKey: ["wraps", "preview", form.getValues().period],
+    queryFn: async () => await previewWrap(form.getValues().period),
   });
 
   useMemo(() => {
@@ -64,10 +73,22 @@ function NewWrapPage() {
     }
   }, [error]);
 
+  useMemo(() => {
+    if (isSuccess) {
+      toast.success("Your wrap has successfully been created!");
+      setTimeout(() => {
+        router.navigate({
+          to: "/app/wraps",
+        });
+      }, 2000);
+    }
+  }, [isSuccess]);
+
   return (
     <Form {...form}>
       <form
-        onSubmit={() => {
+        onSubmit={(event) => {
+          event.preventDefault();
           mutate(form.getValues());
         }}
         className="w-full grid grid-cols-1 md:grid-cols-3 gap-4"
@@ -204,11 +225,79 @@ function NewWrapPage() {
               Here's a preview of what we found!
             </CardDescription>
           </CardHeader>
-          <CardContent className=""></CardContent>
+          {isLoading ? (
+            <CardContent className="flex flex-col justify-center items-center my-8 mx-auto">
+              <Loader2 className="w-10 h-10 animate-spin" />
+            </CardContent>
+          ) : isError ? (
+            <CardContent className="flex flex-col gap-4 justify-center items-center my-8 mx-auto">
+              <img
+                src={ErrorImage}
+                alt="Preview Error"
+                className="w-1/3 mx-auto"
+              />
+              <p className="text-xs text-center text-gray-500">
+                There was an issue loading the data, please try again!
+              </p>
+            </CardContent>
+          ) : (
+            <CardContent className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <span className="text-sm font-semibold">Top Tracks</span>
+                <div className="w-full grid grid-cols-2 gap-2">
+                  {data?.tracks.slice(0, 10).map((track) => (
+                    <Card key={track.id}>
+                      <CardHeader className="flex flex-row gap-2 items-center">
+                        <img
+                          src={
+                            track.album.images.length > 0
+                              ? track.album.images[0].url
+                              : ""
+                          }
+                          alt="Track Image"
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div className="flex flex-col gap-2">
+                          <CardTitle>{track.name}</CardTitle>
+                          <CardDescription>
+                            {track.artists.map((a) => a.name).join(", ")}
+                          </CardDescription>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="text-sm font-semibold">Top Tracks</span>
+                <div className="w-full grid grid-cols-2 gap-2">
+                  {data?.artists.slice(0, 10).map((artist) => (
+                    <Card key={artist.id}>
+                      <CardHeader className="flex flex-row gap-2 items-center">
+                        <img
+                          src={
+                            artist.images.length > 0 ? artist.images[0].url : ""
+                          }
+                          alt="Track Image"
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div className="flex flex-col gap-2">
+                          <CardTitle>{artist.name}</CardTitle>
+                          <CardDescription>
+                            {artist.genres.join(", ")}
+                          </CardDescription>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          )}
         </Card>
         <div className="md:col-span-3 flex flex-row justify-end">
           <Button type="submit" disabled={isPending || !form.formState.isValid}>
-            {isPending ? <Loader2 /> : <></>}
+            {isPending ? <Loader2 className="animate-spin" /> : <></>}
             Save
           </Button>
         </div>
