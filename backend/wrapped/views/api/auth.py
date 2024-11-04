@@ -130,6 +130,7 @@ def get_tokens(request):
 @csrf_exempt
 def get_user(request):
     if request.method == "GET":
+        print(f"/me hit, request user email context -> {request.user_email}")
         auth_header = request.headers.get("Authorization")
 
         session = requests.Session()
