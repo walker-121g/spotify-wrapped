@@ -1,8 +1,8 @@
-import { beforeAll, describe, test, expect, afterAll, afterEach } from "vitest";
+import { beforeAll, describe, test, expect } from "vitest";
 import { render } from "@testing-library/react";
-import {graphql, http as mswHttp, HttpResponse } from "msw";
-import { setupServer } from 'msw/node'
+import  nock  from 'nock';
 import { UserContext } from "@/stores/user.store";
+import { useAuth } from '@/stores/auth.store';
 
 import {
   useQuery,
@@ -54,7 +54,7 @@ describe("<Example />", () => {
     expect(getByText("Example")).toBeTruthy();
   });
 });
-describe ("<InterceptionTest />", () => {
+describe ("<Mock Test />", () => {
   let response: Response
   let body: UserContext
   beforeAll(async () => {
@@ -63,59 +63,52 @@ describe ("<InterceptionTest />", () => {
     );
     body = await response.json();
   });
-  test("Basic Return", async () => {
+  test("Basic Return",() => {
     expect(body.country).toEqual("America");
-    expect(body.email).toEqual("email");
-    expect(body.display_name).toEqual("john");
+    expect(body.email).toEqual("Email");
+    expect(body.display_name).toEqual("John");
     expect(response.status).toEqual(200);
+  });
+  test("auth.store.ts test, useAuth invalid token", () => {
+    const tok = useAuth.getState().token;
+    expect(tok).toEqual(undefined);
+    
+  })
 })
-})
 
-const userData = {
-  country: "America",
-  email: "email",
-  display_name: "john",
-  explicit_content: {
-    filter_enabled: true,
-    filter_locked: false,
-  },
-  external_urls: {
-    spotify: "spotify",
-  },
-  followers: {
-    href: "thing",
-    total: "placeholder",
-  },
-  href: "href",
-  id: "id",
-  product: "damn",
-  type: "type",
-  uri: "url",
-};
+const auth = nock('http://localhost:8000/api')
+  .get('/auth/token')
+  .replyWithError({
+    status: 400,
+    message: "Error"
+  })
+  
 
-export const restHandlers = [
-  mswHttp.get('https://api.spotify.com/v1/me', () => {
-    return HttpResponse.json(userData)
-  }),
-]
-
-const graphqlHandlers = [
-  graphql.query('ListPosts', () => {
-    return HttpResponse.json(
-      {
-        data: { userData },
+const scope = nock('https://api.spotify.com')
+  .get('/v1/me')
+  .reply(200, {
+      country: "America",
+      email: "Email",
+      display_name: "John",
+      explicit_content: {
+        filter_enabled: true,
+        filter_locked: true,
       },
-    )
-  }),
-]
-
-const server = setupServer(...restHandlers, ...graphqlHandlers)
-
-// Start server before all tests
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
-
-//  Close server after all tests
-afterAll(() => server.close())
-
-// Reset handlers after each test `important for test isolation`
-afterEach(() => server.resetHandlers())
+      external_urls: {
+        spotify: "exturnal_url",
+      },
+      followers: {
+        href: "href",
+        total: 2,
+      },
+      href: "href",
+      id: "id",
+      images: {
+        height: 1,
+        url: "33",
+        width: 2,
+      },
+      product: "product",
+      type: "type",
+      uri: "url",
+  })
