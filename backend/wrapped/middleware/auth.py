@@ -29,6 +29,7 @@ class AuthMiddleware:
             and not request.path.startswith("/api/auth/begin")
             and not request.path.startswith("/api/auth/redirect")
             and not request.path.startswith("/api/auth/token")
+            and not request.path.startswith("/api/feedback/create")
         ):
             auth_header = request.headers.get("Authorization")
 
