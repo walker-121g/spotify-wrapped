@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout, delete_account
 from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, accept_wrap, decline_wrap, preview_wrap
+from wrapped.views.api.feedback import create_feedback
 from wrapped.views.frontend import index
 
 
@@ -64,6 +65,11 @@ urlpatterns = [
         "api/wraps/preview",
         preview_wrap,
         name="preview_wrap",
+    ),
+    path(
+        "api/feedback/create",
+        create_feedback,
+        name="create_feedback",
     ),
     re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]

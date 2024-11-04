@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -44,17 +44,13 @@ export const Header = () => {
           </Button>
         </SheetTrigger>
         <SheetContent
-          side="left"
+          side="right"
           className="flex flex-col gap-4 p-8 w-2/3 h-screen"
         >
           <SheetHeader>
             <SheetTitle>Spotify Wrapped</SheetTitle>
             <SheetDescription>CS 2340 - Group 46</SheetDescription>
-            <SheetClose asChild className="absolute top-4 right-4">
-              <Button variant="outline" size="icon">
-                <X />
-              </Button>
-            </SheetClose>
+            <SheetClose />
           </SheetHeader>
           <div className="flex flex-col gap-2 mt-4">
             <Button asChild variant="ghost">

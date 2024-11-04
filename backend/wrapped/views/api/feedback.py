@@ -1,11 +1,11 @@
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from wrapped.models import User, Feedback
+from wrapped.models import Feedback
 
 
 @csrf_exempt
-def create_wrap(request):
+def create_feedback(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
