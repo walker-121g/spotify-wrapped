@@ -12,7 +12,7 @@ export async function http<T>(
     blobResponse?: boolean;
     reAuthed?: boolean;
     omitAuth?: boolean;
-  }
+  },
 ): Promise<T> {
   try {
     const tok = useAuth.getState().token;
@@ -43,6 +43,7 @@ export async function http<T>(
       const resp = await fetch(`${BASE_URL}${path}`, {
         ...req,
         method,
+        credentials: "include",
         headers: {
           ...(req?.headers || {}),
           Authorization: `Bearer ${newTok}`,

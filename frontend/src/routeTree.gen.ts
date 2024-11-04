@@ -18,6 +18,12 @@ import { Route as AppImport } from './routes/app'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
+import { Route as AppSettingsImport } from './routes/app/settings'
+import { Route as AppSearchImport } from './routes/app/search'
+import { Route as AppProfileImport } from './routes/app/profile'
+import { Route as AppMessagesImport } from './routes/app/messages'
+import { Route as AppWrapsIndexImport } from './routes/app/wraps/index'
+import { Route as AppWrapsNewImport } from './routes/app/wraps/new'
 
 // Create/Update Routes
 
@@ -60,6 +66,42 @@ const IndexRoute = IndexImport.update({
 const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSettingsRoute = AppSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSearchRoute = AppSearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppProfileRoute = AppProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppMessagesRoute = AppMessagesImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppWrapsIndexRoute = AppWrapsIndexImport.update({
+  id: '/wraps/',
+  path: '/wraps/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppWrapsNewRoute = AppWrapsNewImport.update({
+  id: '/wraps/new',
+  path: '/wraps/new',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -109,11 +151,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/app/messages': {
+      id: '/app/messages'
+      path: '/messages'
+      fullPath: '/app/messages'
+      preLoaderRoute: typeof AppMessagesImport
+      parentRoute: typeof AppImport
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileImport
+      parentRoute: typeof AppImport
+    }
+    '/app/search': {
+      id: '/app/search'
+      path: '/search'
+      fullPath: '/app/search'
+      preLoaderRoute: typeof AppSearchImport
+      parentRoute: typeof AppImport
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsImport
+      parentRoute: typeof AppImport
+    }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/app/wraps/new': {
+      id: '/app/wraps/new'
+      path: '/wraps/new'
+      fullPath: '/app/wraps/new'
+      preLoaderRoute: typeof AppWrapsNewImport
+      parentRoute: typeof AppImport
+    }
+    '/app/wraps/': {
+      id: '/app/wraps/'
+      path: '/wraps'
+      fullPath: '/app/wraps'
+      preLoaderRoute: typeof AppWrapsIndexImport
       parentRoute: typeof AppImport
     }
   }
@@ -122,11 +206,23 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AppRouteChildren {
+  AppMessagesRoute: typeof AppMessagesRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppSearchRoute: typeof AppSearchRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppWrapsNewRoute: typeof AppWrapsNewRoute
+  AppWrapsIndexRoute: typeof AppWrapsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppMessagesRoute: AppMessagesRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppSearchRoute: AppSearchRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppWrapsNewRoute: AppWrapsNewRoute,
+  AppWrapsIndexRoute: AppWrapsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -138,7 +234,13 @@ export interface FileRoutesByFullPath {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/wraps/new': typeof AppWrapsNewRoute
+  '/app/wraps': typeof AppWrapsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -147,7 +249,13 @@ export interface FileRoutesByTo {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
+  '/app/wraps/new': typeof AppWrapsNewRoute
+  '/app/wraps': typeof AppWrapsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -158,7 +266,13 @@ export interface FileRoutesById {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/messages': typeof AppMessagesRoute
+  '/app/profile': typeof AppProfileRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/wraps/new': typeof AppWrapsNewRoute
+  '/app/wraps/': typeof AppWrapsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -170,9 +284,27 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/demo'
     | '/login'
+    | '/app/messages'
+    | '/app/profile'
+    | '/app/search'
+    | '/app/settings'
     | '/app/'
+    | '/app/wraps/new'
+    | '/app/wraps'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact-us' | '/demo' | '/login' | '/app'
+  to:
+    | '/'
+    | '/about'
+    | '/contact-us'
+    | '/demo'
+    | '/login'
+    | '/app/messages'
+    | '/app/profile'
+    | '/app/search'
+    | '/app/settings'
+    | '/app'
+    | '/app/wraps/new'
+    | '/app/wraps'
   id:
     | '__root__'
     | '/'
@@ -181,7 +313,13 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/demo'
     | '/login'
+    | '/app/messages'
+    | '/app/profile'
+    | '/app/search'
+    | '/app/settings'
     | '/app/'
+    | '/app/wraps/new'
+    | '/app/wraps/'
   fileRoutesById: FileRoutesById
 }
 
@@ -232,7 +370,13 @@ export const routeTree = rootRoute
     "/app": {
       "filePath": "app.tsx",
       "children": [
-        "/app/"
+        "/app/messages",
+        "/app/profile",
+        "/app/search",
+        "/app/settings",
+        "/app/",
+        "/app/wraps/new",
+        "/app/wraps/"
       ]
     },
     "/contact-us": {
@@ -244,8 +388,32 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
+    "/app/messages": {
+      "filePath": "app/messages.tsx",
+      "parent": "/app"
+    },
+    "/app/profile": {
+      "filePath": "app/profile.tsx",
+      "parent": "/app"
+    },
+    "/app/search": {
+      "filePath": "app/search.tsx",
+      "parent": "/app"
+    },
+    "/app/settings": {
+      "filePath": "app/settings.tsx",
+      "parent": "/app"
+    },
     "/app/": {
       "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/app/wraps/new": {
+      "filePath": "app/wraps/new.tsx",
+      "parent": "/app"
+    },
+    "/app/wraps/": {
+      "filePath": "app/wraps/index.tsx",
       "parent": "/app"
     }
   }
