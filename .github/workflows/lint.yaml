@@ -22,7 +22,7 @@ jobs:
           pip install flake8
       - name: Lint with flake8
         run: |
-          flake8 backend/
+          flake8 --max-line-length 120 --exclude=migrations backend/
   ts-lint:
     name: TypeScript Lint
     runs-on: ubuntu-latest

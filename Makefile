@@ -12,7 +12,7 @@ lint-frontend: check-root
 	(cd frontend && pnpm install && pnpm run lint)
 
 lint-backend: check-root
-	(flake8 backend/)
+	(flake8 --max-line-length 120 --exclude=migrations backend/)
 
 test-frontend: check-root
 	(cd frontend && pnpm install && pnpm run test)
