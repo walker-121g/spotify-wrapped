@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout
+from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout, delete_account
 from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, accept_wrap, decline_wrap, preview_wrap
 from wrapped.views.frontend import index
 
@@ -29,6 +29,11 @@ urlpatterns = [
         "api/auth/logout",
         logout,
         name="logout",
+    ),
+    path(
+        "api/auth/delete",
+        delete_account,
+        name="delete_account",
     ),
     path(
         "api/wraps",
