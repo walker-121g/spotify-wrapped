@@ -20,13 +20,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useTheme } from "@/components/theme-provider";
 
-import { Menu, Settings, LogOut, User } from "lucide-react";
+import { Menu, Settings, LogOut, User, Sun } from "lucide-react";
 import { NavLinks } from "./links";
 
 export const Topbar = () => {
   const auth = useAuth();
   const context = useContext();
+  const theme = useTheme();
 
   return (
     <div className="w-full p-8 flex flex-row justify-between items-center">
@@ -73,6 +75,15 @@ export const Topbar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" className="mr-8 mt-2">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                theme.setTheme(theme.theme === "dark" ? "light" : "dark");
+              }}
+            >
+              <Sun />
+              <span>{theme.theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link to="/app/profile">
