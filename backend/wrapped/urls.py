@@ -1,6 +1,8 @@
 from django.urls import path, re_path
-from .views import begin_auth, handle_auth_callback
-from .views import get_tokens, get_user, logout, index
+from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout
+from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, accept_wrap, decline_wrap, preview_wrap
+from wrapped.views.frontend import index
+
 
 urlpatterns = [
     path(
@@ -27,6 +29,36 @@ urlpatterns = [
         "api/auth/logout",
         logout,
         name="logout",
+    ),
+    path(
+        "api/wraps",
+        get_wraps,
+        name="get_wraps",
+    ),
+    path(
+        "api/wraps/shared",
+        get_shared_wraps,
+        name="get_shared_wraps",
+    ),
+    path(
+        "api/wraps/create",
+        create_wrap,
+        name="create_wrap",
+    ),
+    path(
+        "api/wraps/accept",
+        accept_wrap,
+        name="accept_wrap",
+    ),
+    path(
+        "api/wraps/decline",
+        decline_wrap,
+        name="decline_wrap",
+    ),
+    path(
+        "api/wraps/preview",
+        preview_wrap,
+        name="preview_wrap",
     ),
     re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]
