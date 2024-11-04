@@ -1,6 +1,5 @@
 from django.http import HttpResponse, JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
-from urllib.parse import urlparse
 import requests
 
 @csrf_exempt
@@ -34,13 +33,9 @@ def get_user_albums(request):
         return HttpResponse("Invalid Request Method")
 
 @csrf_exempt
-def get_album(request):
+def get_album(request, id):
     if request.method == "GET": 
         auth_header = request.headers.get("Authorization")
-
-
-        parsed_url = urlparse(request.build_absolute_uri())
-        id = parsed_url[-1]
 
         session = requests.Session()
         headers = {
@@ -95,13 +90,10 @@ def get_albums(request):
         return HttpResponse("Invalid Request Method")
 
 @csrf_exempt
-def get_album_tracks(request):
+def get_album_tracks(request, id):
     if request.method == "GET":
         auth_header = request.headers.get("Authorization") 
         
-        parsed_url = urlparse(request.build_absolute_uri())
-        id = parsed_url[-2]  
-
         session = requests.Session()
         headers = {
                 "Authorization": auth_header,
