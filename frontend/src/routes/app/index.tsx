@@ -7,11 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getAlbum, getUserAlbums } from "@/services/album.service";
 import { useAuth } from "@/stores/auth.store";
 import { useContext } from "@/stores/user.store";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
