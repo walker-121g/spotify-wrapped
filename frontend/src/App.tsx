@@ -3,6 +3,7 @@ import "./index.css";
 import { RouterProvider } from "@tanstack/react-router";
 import { createRouter } from "./router";
 import { useAuth } from "./stores/auth.store";
+import { ThemeProvider } from "./components/theme-provider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,13 +14,15 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const isLoggedIn = useAuth(s => s.isAuthed);
+  const isLoggedIn = useAuth((s) => s.isAuthed);
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={createRouter()} context={{ isLoggedIn }} />
-      </QueryClientProvider>
+      <ThemeProvider defaultTheme="light">
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={createRouter()} context={{ isLoggedIn }} />
+        </QueryClientProvider>
+      </ThemeProvider>
     </div>
   );
 }
