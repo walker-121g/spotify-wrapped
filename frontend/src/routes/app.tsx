@@ -1,3 +1,5 @@
+import { Sidebar } from "@/components/router/app/sidebar";
+import { Topbar } from "@/components/router/app/topbar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,43 +42,45 @@ function AppLayout() {
     return <Loader />;
   } else if (q.isError) {
     return (
-      <div className="grid grid-cols-1 px-6 w-full max-w-6xl mx-auto pb-6">
-        <main className="w-full">
-          <Card>
-            <CardHeader>
-              <CardTitle>Failed to get context</CardTitle>
-              <CardDescription>
-                Failed to retrieve your user information, please logout and
-                login again
-              </CardDescription>
-            </CardHeader>
-            <CardFooter className="justify-end gap-4">
-              <Button variant="ghost" onClick={() => window.location.reload()}>
-                Try Again
-              </Button>
-              <Button onClick={() => useAuth.getState().refresh()}>
-                Refresh Tokens
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => useAuth.getState().logout()}
-              >
-                Logout
-              </Button>
-            </CardFooter>
-          </Card>
-        </main>
-      </div>
+      <main className="w-screen h-screen items-center justify-center">
+        <Card>
+          <CardHeader>
+            <CardTitle>Failed to get context</CardTitle>
+            <CardDescription>
+              Failed to retrieve your user information, please logout and login
+              again
+            </CardDescription>
+          </CardHeader>
+          <CardFooter className="justify-end gap-4">
+            <Button variant="ghost" onClick={() => window.location.reload()}>
+              Try Again
+            </Button>
+            <Button onClick={() => useAuth.getState().refresh()}>
+              Refresh Tokens
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => useAuth.getState().logout()}
+            >
+              Logout
+            </Button>
+          </CardFooter>
+        </Card>
+      </main>
     );
   }
 
   useContext.getState().setUser(q.data as UserContext);
 
   return (
-    <div className="grid grid-cols-1 px-6 w-full max-w-6xl mx-auto pb-6">
-      <main className="w-full">
-        <Outlet />
-      </main>
-    </div>
+    <main className="w-screen h-screen flex flex-row overflow-hidden">
+      <Sidebar />
+      <div className="w-[-webkit-fill-available] h-screen flex flex-col overflow-x-hidden">
+        <Topbar />
+        <div className="w-full overflow-y-auto overflow-x-hidden p-8 md:p-16">
+          <Outlet />
+        </div>
+      </div>
+    </main>
   );
 }
