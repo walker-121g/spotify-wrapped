@@ -6,6 +6,8 @@ from wrapped.views.api.album import get_user_albums, get_album, get_albums, get_
 from wrapped.views.api.album import check_if_saved, save_albums, delete_albums
 from wrapped.views.api.artists import get_artist, get_artists, get_artist_albums
 from wrapped.views.api.artists import get_related_artists, get_top_tracks
+from wrapped.views.api.follow import get_following, follow
+from wrapped.views.api.post import get_posts, get_following_posts, create_post, like, comment
 from wrapped.views.frontend import index
 
 
@@ -134,6 +136,41 @@ urlpatterns = [
         "api/artists/<str:id>/related-artists",
         get_related_artists,
         name="get_related_artists"
+    ),
+    path(
+        "api/following",
+        get_following,
+        name="get_following",
+    ),
+    path(
+        "api/following/edit",
+        follow,
+        name="follow",
+    ),
+    path(
+        "api/posts",
+        get_posts,
+        name="get_posts",
+    ),
+    path(
+        "api/posts/following",
+        get_following_posts,
+        name="get_following_posts",
+    ),
+    path(
+        "api/posts/create",
+        create_post,
+        name="create_post",
+    ),
+    path(
+        "api/posts/like",
+        like,
+        name="like",
+    ),
+    path(
+        "api/posts/comment",
+        comment,
+        name="comment",
     ),
     re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]
