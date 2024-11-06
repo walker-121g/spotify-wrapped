@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse 
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 
@@ -8,7 +8,7 @@ def get_user_albums(request):
     if request.method == "GET":
         auth_header = request.headers.get("Authorization")
 
-        limit = request.GET.get("limit") 
+        limit = request.GET.get("limit")
         offset = request.GET.get("offset")
 
         session = requests.Session()
@@ -34,7 +34,7 @@ def get_user_albums(request):
 
 @csrf_exempt
 def get_album(request, id):
-    if request.method == "GET": 
+    if request.method == "GET":
         auth_header = request.headers.get("Authorization")
 
         session = requests.Session()
@@ -61,9 +61,9 @@ def get_album(request, id):
 @csrf_exempt
 def get_albums(request):
     if request.method == "GET":
-        auth_header = request.headers.get("Authorization") 
+        auth_header = request.headers.get("Authorization")
 
-        ids = request.GET.get("ids") 
+        ids = request.GET.get("ids")
 
         session = requests.Session()
         headers = {
@@ -73,14 +73,13 @@ def get_albums(request):
 
         resp = session.get(f"https://api.spotify.com/v1/albums?ids={ids}", headers=headers)
 
-        try: 
+        try:
             data = resp.json()
         except requests.exceptions.JSONDecodeError:
             return JsonResponse({"error": "Failed to get albums"})
 
-
         if "error" in data:
-            return JsonResponse({"error": data["error"]}, status = 401)
+            return JsonResponse({"error": data["error"]}, status=401)
 
         return JsonResponse(data, status=200)
     else:
@@ -90,7 +89,7 @@ def get_albums(request):
 @csrf_exempt
 def get_album_tracks(request, id):
     if request.method == "GET":
-        auth_header = request.headers.get("Authorization") 
+        auth_header = request.headers.get("Authorization")
 
         session = requests.Session()
         headers = {
@@ -106,9 +105,9 @@ def get_album_tracks(request, id):
             return JsonResponse({"error": "Failed to get tracks"})
 
         if "error" in data:
-            return JsonResponse({"error": data["error"]}, status = 401)
+            return JsonResponse({"error": data["error"]}, status=401)
 
-        return JsonResponse(data, status = 200)
+        return JsonResponse(data, status=200)
     else:
         return HttpResponse("Invalid Request Method")
 
@@ -116,7 +115,7 @@ def get_album_tracks(request, id):
 @csrf_exempt
 def save_albums(request):
     if request.method == "PUT":
-        auth_header = request.headers.get("Authorization") 
+        auth_header = request.headers.get("Authorization")
 
         ids = request.GET.get("ids")
 
@@ -134,9 +133,9 @@ def save_albums(request):
             return JsonResponse({"error": "Failed to save albums."})
 
         if "error" in data:
-            return JsonResponse({"error": data["error"]}, status = 401)
+            return JsonResponse({"error": data["error"]}, status=401)
 
-        return JsonResponse(data, status = 200)
+        return JsonResponse(data, status=200)
     else:
         return HttpResponse("Invalid Request Method")
 
@@ -144,7 +143,7 @@ def save_albums(request):
 @csrf_exempt
 def delete_albums(request):
     if request.method == "DELETE":
-        auth_header = request.headers.get("Authorization") 
+        auth_header = request.headers.get("Authorization")
 
         ids = request.GET.get("ids")
 
@@ -162,9 +161,9 @@ def delete_albums(request):
             return JsonResponse({"error": "Failed to delete albums."})
 
         if "error" in data:
-            return JsonResponse({"error": data["error"]}, status = 401)
+            return JsonResponse({"error": data["error"]}, status=401)
 
-        return JsonResponse(data, status = 200)
+        return JsonResponse(data, status=200)
     else:
         return HttpResponse("Invalid Request Method")
 
@@ -172,7 +171,7 @@ def delete_albums(request):
 @csrf_exempt
 def check_if_saved(request):
     if request.method == "GET":
-        auth_header = request.headers.get("Authorization") 
+        auth_header = request.headers.get("Authorization")
 
         ids = request.GET.get("ids")
 
@@ -190,8 +189,8 @@ def check_if_saved(request):
             return JsonResponse({"error": "Failed to check for albums."})
 
         if "error" in data:
-            return JsonResponse({"error": data["error"]}, status = 401)
+            return JsonResponse({"error": data["error"]}, status=401)
 
-        return JsonResponse(data, status = 200)
+        return JsonResponse(data, status=200)
     else:
         return HttpResponse("Invalid Request Method")
