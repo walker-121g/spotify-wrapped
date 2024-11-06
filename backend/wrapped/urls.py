@@ -4,8 +4,8 @@ from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, ac
 from wrapped.views.api.feedback import create_feedback
 from wrapped.views.api.album import get_user_albums, get_album, get_albums, get_album_tracks
 from wrapped.views.api.album import check_if_saved, save_albums, delete_albums
-from wrapped.views.api.artists import get_artist, get_artists, get_artist_albums 
-from wrapped.views.api.artists import get_related_artists, get_top_tracks 
+from wrapped.views.api.artists import get_artist, get_artists, get_artist_albums
+from wrapped.views.api.artists import get_related_artists, get_top_tracks
 from wrapped.views.frontend import index
 
 
