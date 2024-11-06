@@ -101,7 +101,7 @@ export async function getRelatedArtists(id: string) {
             throw e;
         } else {
             throw new SafeError(
-                "Failed to load artist top tracks, please try again later."
+                "Failed to load artist related artists, please try again later."
             )
         }
     }
