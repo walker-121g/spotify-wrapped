@@ -11,8 +11,8 @@ import { ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
   return (
-    <div className="grid grid-cols-1 p-6 h-screen w-full items-center justify-items-center">
-      <Card className="w-full max-w-md">
+    <div className="m-auto items-center justify-items-center">
+      <Card className="m-auto w-full max-w-md">
         <CardHeader>
           <CardTitle>Page Not Found</CardTitle>
           <CardDescription>

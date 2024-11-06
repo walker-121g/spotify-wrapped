@@ -8,6 +8,7 @@ interface AuthStore {
   authenticate: (token: string) => Promise<void>;
   refresh: () => Promise<void>;
   logout: () => void;
+  delete: () => void;
 }
 
 export const useAuth = create(
@@ -42,9 +43,18 @@ export const useAuth = create(
         }
       },
       logout: async () => {
-        await http("GET", "/auth/logout", {
-          omitAuth: true,
-        });
+        try {
+          await http("GET", "/auth/logout", {
+            omitAuth: true,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+
+        set({ ...get(), isAuthed: false, token: undefined });
+      },
+      delete: async () => {
+        await http("POST", "/auth/delete");
 
         set({ ...get(), isAuthed: false, token: undefined });
       },
