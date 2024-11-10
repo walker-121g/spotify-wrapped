@@ -52,21 +52,46 @@ function WrapDetail() {
   //  "url-to-image-8.jpg",
   //];
 
-  const backgroundColors = ["#f46ebe", "#96f0b6", "#202f72", "#6a00ba", "#ff8b1c", "#ebf55e", "#ff5a49", "#c6dffb"]; // for the bg colors as opposed to images
-  const slideData = [ // all of these need actual data, but yeah idk how to really retrieve it :/
-    { title: "My Top Genres", value: 0}, // 
-    { title: "Most Listened Countries", value: 0}, // maybe top 5? maybe just top 1
-    { title: "You played X songs", description: "That's a total of $MINUTES$ minutes", value: 0}, // X = total songs played. im hoping we can find the total minutes listened as well.
-    { title: "Your top song was $Top Track$ by $Artist$", description: "You played it $PLAYS$ times. That's $MINUTES$ minutes, and it still sounds perfect.", value: 0}, // (times played * track length)
-    { title: "My Top Tracks", value: 0}, // top 5, we can include the cover art, artist name (and maybe album name) for each one
-    { title: "Say hello to your top artist, $Top Artist$", description: "You spent $MINUTES$ minutes together, more than any of your $numArtists?$ other artists.", value: 0 }, // can also include number of plays
-    { title: "My Top Artists", value: 0}, // top 5 artists, maybe also include total i.e. "you listened to X artists this year, but one came out on top"
-    { value: 0}, // potentially include everything (top artists, top songs, minutes listened, and top genre)
+  const backgroundColors = [
+    "#f46ebe",
+    "#96f0b6",
+    "#202f72",
+    "#6a00ba",
+    "#ff8b1c",
+    "#ebf55e",
+    "#ff5a49",
+    "#c6dffb",
+  ]; // for the bg colors as opposed to images
+  const slideData = [
+    // all of these need actual data, but yeah idk how to really retrieve it :/
+    { title: "My Top Genres", value: 0 }, //
+    { title: "Most Listened Countries", value: 0 }, // maybe top 5? maybe just top 1
+    {
+      title: "You played X songs",
+      description: "That's a total of $MINUTES$ minutes",
+      value: 0,
+    }, // X = total songs played. im hoping we can find the total minutes listened as well.
+    {
+      title: "Your top song was $Top Track$ by $Artist$",
+      description:
+        "You played it $PLAYS$ times. That's $MINUTES$ minutes, and it still sounds perfect.",
+      value: 0,
+    }, // (times played * track length)
+    { title: "My Top Tracks", value: 0 }, // top 5, we can include the cover art, artist name (and maybe album name) for each one
+    {
+      title: "Say hello to your top artist, $Top Artist$",
+      description:
+        "You spent $MINUTES$ minutes together, more than any of your $numArtists?$ other artists.",
+      value: 0,
+    }, // can also include number of plays
+    { title: "My Top Artists", value: 0 }, // top 5 artists, maybe also include total i.e. "you listened to X artists this year, but one came out on top"
+    { value: 0 }, // potentially include everything (top artists, top songs, minutes listened, and top genre)
   ];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
+
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
@@ -99,6 +124,12 @@ function WrapDetail() {
           <p>{slideData[currentSlide].value}</p>
         </div>
 
+        {/* placeholder content */}
+        <div className="slide">
+          <h2>{wrap.tracks[currentSlide].id}</h2>
+        </div>
+
+        {/* Slide navigation */}
         <div className="slide-navigation">
           <Button onClick={prevSlide}>Previous</Button>
           <Button onClick={nextSlide}>Next</Button>
