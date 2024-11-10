@@ -159,6 +159,34 @@ def create_wrap(request):
 
 
 @csrf_exempt
+def delete_wrap(request):
+    if request.method == "POST":
+        email = request.user_email
+        data = json.loads(request.body)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User does not exist"}, status=400)
+
+        try:
+            wrap = Wrap.objects.get(id=data["id"])
+        except Wrap.DoesNotExist:
+            return JsonResponse({"error": "Wrap does not exist"}, status=400)
+
+        try:
+            wrap_user = WrapUser.objects.get(user=user, wrap=wrap)
+            if wrap_user.accepted:
+                wrap.delete()
+        except WrapUser.DoesNotExist:
+            return JsonResponse({"error": "User is not part of the wrap"}, status=400)
+
+        return JsonResponse({"success": True}, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
 def accept_wrap(request):
     if request.method == "POST":
         email = request.user_email

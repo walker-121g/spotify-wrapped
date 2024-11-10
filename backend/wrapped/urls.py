@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout, delete_account
-from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, accept_wrap, decline_wrap, preview_wrap
+from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap, delete_wrap, accept_wrap, decline_wrap, preview_wrap
 from wrapped.views.api.feedback import create_feedback
 from wrapped.views.api.album import get_user_albums, get_album, get_albums, get_album_tracks
 from wrapped.views.api.album import check_if_saved, save_albums, delete_albums
@@ -56,6 +56,11 @@ urlpatterns = [
         "api/wraps/create",
         create_wrap,
         name="create_wrap",
+    ),
+    path(
+        "api/wraps/delete",
+        delete_wrap,
+        name="delete_wrap",
     ),
     path(
         "api/wraps/accept",
@@ -166,7 +171,7 @@ urlpatterns = [
         "api/posts/delete",
         delete_post,
         name="delete_post",
-    )
+    ),
     path(
         "api/posts/like",
         like,

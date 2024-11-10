@@ -2,14 +2,14 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.db import transaction
-from wrapped.models import User, Follow, Post, Like, Comment, Wrap
+from wrapped.models import User, Follow, Post, Like, Comment, Wrap, WrapUser
 
 
 @csrf_exempt
 def get_posts(request):
     if request.method == "GET":
         email = request.user_email
-        page = request.GET.get('page', 1)
+        page = int(request.GET.get('page', 1))
 
         try:
             user = User.objects.get(email=email)
@@ -17,7 +17,7 @@ def get_posts(request):
             return HttpResponse("User not found", status=404)
 
         posts = Post.objects.order_by('-created_at').all()
-        posts = posts[(page - 1) * 10:page * 10]
+        posts = posts[(page) * 10:(page + 1) * 10]
         posts_data = []
 
         for post in posts:
@@ -48,7 +48,7 @@ def get_posts(request):
 def get_following_posts(request):
     if request.method == "GET":
         email = request.user_email
-        page = request.GET.get('page', 1)
+        page = int(request.GET.get('page', 1))
 
         try:
             user = User.objects.get(email=email)
@@ -59,7 +59,7 @@ def get_following_posts(request):
         following = [f.following for f in following]
 
         posts = Post.objects.filter(user__in=following).order_by('-created_at').all()
-        posts = posts[(page - 1) * 10:page * 10]
+        posts = posts[(page) * 10:(page + 1) * 10]
         posts_data = []
 
         for post in posts:
@@ -94,11 +94,14 @@ def create_post(request):
 
         try:
             user = User.objects.get(email=email)
-            wrap = Wrap.objects.get(user=user, id=data['wrap_id'])
+            wrap = Wrap.objects.get(id=data['wrap_id'])
+            wrap_user = WrapUser.objects.get(wrap=wrap, user=user)
         except User.DoesNotExist:
             return HttpResponse("User not found", status=404)
         except Wrap.DoesNotExist:
             return HttpResponse("Wrap not found", status=404)
+        except WrapUser.DoesNotExist:
+            return HttpResponse("User not in wrap", status=400)
 
         try:
             with transaction.atomic():
