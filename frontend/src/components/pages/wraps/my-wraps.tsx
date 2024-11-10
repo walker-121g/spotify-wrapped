@@ -33,7 +33,7 @@ export const MyWraps = () => {
             key={wrap.name}
             onClick={() => {
               router.navigate({
-                to: `/app/wrap/${wrap.id}`,
+                to: `/app/wraps/${wrap.id}`,
               });
             }}
             className="cursor-pointer"

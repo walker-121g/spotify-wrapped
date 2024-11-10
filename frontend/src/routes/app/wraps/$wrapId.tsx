@@ -1,52 +1,53 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { Fullscreen } from 'lucide-react' // Assuming this is an icon for fullscreen
-import { Button } from '@/components/ui/button'
-import { useQuery } from '@tanstack/react-query'
-import { getWraps } from '@/services/wrap.service'
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Fullscreen } from "lucide-react"; // Assuming this is an icon for fullscreen
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getWraps } from "@/services/wrap.service";
 
-export const Route = createFileRoute('/app/wraps/$id')({
+export const Route = createFileRoute("/app/wraps/$wrapId")({
   component: WrapDetail,
-})
+});
 
 function WrapDetail() {
-  const { id: wrapId } = Route.useParams() as {
-    id: string
-  }
+  const { wrapId } = Route.useParams() as {
+    wrapId: string;
+  };
+
   const {
     data: wraps,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['wraps'],
+    queryKey: ["wraps"],
     queryFn: async () => await getWraps(),
-  })
+  });
 
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   if (isLoading) {
-    return <div>Loading wrap details...</div>
+    return <div>Loading wrap details...</div>;
   }
 
   if (error || !wraps || wraps.length === 0) {
-    return <div>Error loading wrap details. Please try again.</div>
+    return <div>Error loading wrap details. Please try again.</div>;
   }
 
-  const wrap = wraps.find((wrap) => wrap.id === Number(wrapId))
+  const wrap = wraps.find((wrap) => wrap.id === Number(wrapId));
 
   if (!wrap) {
-    return <div>Wrap not found!</div>
+    return <div>Wrap not found!</div>;
   }
-  const totalSlides = 8
+  const totalSlides = 8;
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides)
-  }
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
-  }
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   return (
     <div className="wrap-detail">
@@ -57,11 +58,11 @@ function WrapDetail() {
           onClick={() => setIsFullscreen(!isFullscreen)}
         >
           <Fullscreen />
-          {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+          {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
         </Button>
       </header>
 
-      <div className={`content ${isFullscreen ? 'fullscreen' : ''}`}>
+      <div className={`content ${isFullscreen ? "fullscreen" : ""}`}>
         {/* placeholder content */}
         <div className="slide">
           <h2>{wrap.tracks[currentSlide].id}</h2>
@@ -95,5 +96,5 @@ function WrapDetail() {
         }
       `}</style>
     </div>
-  )
+  );
 }
