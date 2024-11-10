@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, ExternalLink, Eye } from "lucide-react";
+import { EllipsisVertical, Eye } from "lucide-react";
 import { DeleteWrap } from "./delete-wrap";
 import { PostWrap } from "./post-wrap";
 

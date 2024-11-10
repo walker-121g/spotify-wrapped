@@ -12,7 +12,7 @@ def get_posts(request):
         page = int(request.GET.get('page', 1))
 
         try:
-            user = User.objects.get(email=email)
+            User.objects.get(email=email)
         except User.DoesNotExist:
             return HttpResponse("User not found", status=404)
 
@@ -95,7 +95,7 @@ def create_post(request):
         try:
             user = User.objects.get(email=email)
             wrap = Wrap.objects.get(id=data['wrap_id'])
-            wrap_user = WrapUser.objects.get(wrap=wrap, user=user)
+            WrapUser.objects.get(wrap=wrap, user=user)
         except User.DoesNotExist:
             return HttpResponse("User not found", status=404)
         except Wrap.DoesNotExist:
@@ -108,9 +108,9 @@ def create_post(request):
                 post = Post(user=user, title=data['title'], content=data['content'], wrap=wrap)
                 post.save()
         except Exception as e:
-            return JsonResponse({ 'error': str(e) }, status=400)
+            return JsonResponse({'error': str(e)}, status=400)
 
-        return JsonResponse({ 'success': True }, status=200)
+        return JsonResponse({'success': True}, status=200)
     else:
         return HttpResponse("Invalid request method")
 
@@ -136,9 +136,9 @@ def delete_post(request):
             with transaction.atomic():
                 post.delete()
         except Exception as e:
-            return JsonResponse({ 'error': str(e) }, status=400)
+            return JsonResponse({'error': str(e)}, status=400)
 
-        return JsonResponse({ 'success': True }, status=200)
+        return JsonResponse({'success': True}, status=200)
     else:
         return HttpResponse("Invalid request method")
 
@@ -159,9 +159,9 @@ def like(request):
 
         try:
             like = Like.objects.get(user=user, post=post)
-            return JsonResponse({ 'success': True }, status=200)
+            return JsonResponse({'success': True}, status=200)
         except Like.DoesNotExist:
-            return JsonResponse({ 'success': False }, status=200)
+            return JsonResponse({'success': False}, status=200)
     else:
         if request.method == "POST":
             email = request.user_email
@@ -177,7 +177,7 @@ def like(request):
 
             try:
                 like = Like.objects.get(user=user, post=post)
-                return JsonResponse({ 'success': True }, status=200)
+                return JsonResponse({'success': True}, status=200)
             except Like.DoesNotExist:
                 pass
 
@@ -186,9 +186,9 @@ def like(request):
                     like = Like(user=user, post=post)
                     like.save()
             except Exception as e:
-                return JsonResponse({ 'error': str(e) }, status=400)
+                return JsonResponse({'error': str(e)}, status=400)
 
-            return JsonResponse({ 'success': True }, status=200)
+            return JsonResponse({'success': True}, status=200)
         else:
             if request.method == "DELETE":
                 email = request.user_email
@@ -211,9 +211,9 @@ def like(request):
                     with transaction.atomic():
                         like.delete()
                 except Exception as e:
-                    return JsonResponse({ 'error': str(e) }, status=400)
+                    return JsonResponse({'error': str(e)}, status=400)
 
-                return JsonResponse({ 'success': True }, status=200)
+                return JsonResponse({'success': True}, status=200)
             else:
                 return HttpResponse("Invalid request method")
 
@@ -237,9 +237,9 @@ def comment(request):
                 comment = Comment(user=user, post=post, content=data['content'])
                 comment.save()
         except Exception as e:
-            return JsonResponse({ 'error': str(e) }, status=400)
+            return JsonResponse({'error': str(e)}, status=400)
 
-        return JsonResponse({ 'success': True }, status=200)
+        return JsonResponse({'success': True}, status=200)
     else:
         if request.method == "DELETE":
             email = request.user_email
@@ -260,8 +260,8 @@ def comment(request):
                 with transaction.atomic():
                     comment.delete()
             except Exception as e:
-                return JsonResponse({ 'error': str(e) }, status=400)
+                return JsonResponse({'error': str(e)}, status=400)
 
-            return JsonResponse({ 'success': True }, status=200)
+            return JsonResponse({'success': True}, status=200)
         else:
             return HttpResponse("Invalid request method")

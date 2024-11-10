@@ -1,6 +1,5 @@
 import { useRef, useCallback, MutableRefObject } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
 
 import { getPosts } from "@/services/social.service";
 

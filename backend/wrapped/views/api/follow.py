@@ -56,9 +56,9 @@ def follow(request):
                 follow = Follow(follower=user, following=following)
                 follow.save()
         except Exception as e:
-            return JsonResponse({ 'error': str(e) }, status=400)
+            return JsonResponse({'error': str(e)}, status=400)
 
-        return JsonResponse({ 'success': True }, status=200)
+        return JsonResponse({'success': True}, status=200)
     else:
         if request.method == "DELETE":
             email = request.user_email
@@ -79,8 +79,8 @@ def follow(request):
                     follow = Follow.objects.get(follower=user, following=following)
                     follow.delete()
             except Exception as e:
-                return JsonResponse({ 'error': str(e) }, status=400)
+                return JsonResponse({'error': str(e)}, status=400)
 
-            return JsonResponse({ 'success': True }, status=200)
+            return JsonResponse({'success': True}, status=200)
         else:
             return HttpResponse("Invalid request method")
