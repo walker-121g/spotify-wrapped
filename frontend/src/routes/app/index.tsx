@@ -1,15 +1,9 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useAuth } from "@/stores/auth.store";
-import { useContext } from "@/stores/user.store";
 import { createFileRoute } from "@tanstack/react-router";
+
+import { RecentPosts } from "@/components/pages/feed/recent";
+import { FollowingPosts } from "@/components/pages/feed/following";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
@@ -31,28 +25,24 @@ export const Route = createFileRoute("/app/")({
 });
 
 function DashboardHomePage() {
-  const user = useContext(s => s.user);
-
   return (
-    <Card className="w-full mx-auto max-w-md">
-      <CardHeader>
-        <CardTitle>Dashboard</CardTitle>
-        <CardDescription>Welcome to Spotify wrapped!</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>
-          You are currently logged in as <strong>{user.display_name}</strong>!
-        </p>
-        <p>Your email is {user.email}</p>
-      </CardContent>
-      <CardFooter>
-        <Button
-          onClick={() => useAuth.getState().logout()}
-          variant="destructive"
-        >
-          Logout
-        </Button>
-      </CardFooter>
-    </Card>
+    <div className="w-full flex flex-col gap-4">
+      <Tabs defaultValue="recent" className="w-full">
+        <TabsList className="w-full">
+          <TabsTrigger value="recent" className="w-full">
+            Recent Posts
+          </TabsTrigger>
+          <TabsTrigger value="following" className="w-full">
+            Following
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="recent">
+          <RecentPosts />
+        </TabsContent>
+        <TabsContent value="following">
+          <FollowingPosts />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

@@ -78,6 +78,23 @@ export const updateWrap = async (
   }
 };
 
+export const deleteWrap = async (id: number): Promise<boolean> => {
+  try {
+    const result = await http<{ success: boolean }>("POST", "/wraps/delete", {
+      body: JSON.stringify({ id }),
+    });
+
+    return result.success;
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to delete wrap");
+    }
+  }
+};
+
 export const previewWrap = async (
   period: Wrap["period"],
 ): Promise<WrapPreview> => {

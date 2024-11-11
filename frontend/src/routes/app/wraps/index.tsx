@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MyWraps } from "@/components/pages/wraps/my-wraps";
 import { SharedWraps } from "@/components/pages/wraps/shared-wraps";
+import { PendingWraps } from "@/components/pages/wraps/pending-wraps";
 
 export const Route = createFileRoute("/app/wraps/")({
   component: WrapsPage,
@@ -29,7 +30,9 @@ function WrapsPage() {
         <TabsContent value="shared">
           <SharedWraps />
         </TabsContent>
-        <TabsContent value="pending">Change your password here.</TabsContent>
+        <TabsContent value="pending">
+          <PendingWraps />
+        </TabsContent>
       </Tabs>
     </div>
   );
