@@ -1,7 +1,9 @@
-import { RecentPosts } from "@/components/pages/feed/recent";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/stores/auth.store";
 import { createFileRoute } from "@tanstack/react-router";
+
+import { RecentPosts } from "@/components/pages/feed/recent";
+import { FollowingPosts } from "@/components/pages/feed/following";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/app/")({
   component: DashboardHomePage,
@@ -37,7 +39,9 @@ function DashboardHomePage() {
         <TabsContent value="recent">
           <RecentPosts />
         </TabsContent>
-        <TabsContent value="following"></TabsContent>
+        <TabsContent value="following">
+          <FollowingPosts />
+        </TabsContent>
       </Tabs>
     </div>
   );

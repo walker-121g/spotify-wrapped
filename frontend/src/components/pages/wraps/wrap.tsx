@@ -1,4 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
+import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
 
 import { Wrap as WrapType } from "@/services/types/wrap";
 
@@ -22,7 +23,15 @@ import { EllipsisVertical, Eye } from "lucide-react";
 import { DeleteWrap } from "./delete-wrap";
 import { PostWrap } from "./post-wrap";
 
-export const Wrap = ({ wrap }: { wrap: WrapType }) => {
+export const Wrap = ({
+  wrap,
+  refetch,
+}: {
+  wrap: WrapType;
+  refetch: (
+    options?: RefetchOptions,
+  ) => Promise<QueryObserverResult<WrapType[], Error>>;
+}) => {
   const router = useRouter();
 
   return (
@@ -59,7 +68,7 @@ export const Wrap = ({ wrap }: { wrap: WrapType }) => {
             </DropdownMenuItem>
             <PostWrap wrap={wrap} />
             <DropdownMenuSeparator />
-            <DeleteWrap wrap={wrap} />
+            <DeleteWrap wrap={wrap} refetch={refetch} />
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>

@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import {
+  useMutation,
+  RefetchOptions,
+  QueryObserverResult,
+} from "@tanstack/react-query";
 
 import { Wrap } from "@/services/types/wrap";
 import { deleteWrap } from "@/services/wrap.service";
@@ -22,9 +26,13 @@ import { Button } from "@/components/ui/button";
 export const DeleteWrap = ({
   wrap,
   DeleteButton,
+  refetch,
 }: {
   wrap: Wrap;
   DeleteButton?: JSX.Element;
+  refetch: (
+    options?: RefetchOptions,
+  ) => Promise<QueryObserverResult<Wrap[], Error>>;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { isPending, isSuccess, error, mutate } = useMutation({
@@ -37,6 +45,7 @@ export const DeleteWrap = ({
       toast.error(error.message);
     } else if (isSuccess) {
       toast.success("Wrap deleted successfully");
+      refetch();
       setOpen(false);
     }
   }, [error, isSuccess]);
@@ -71,7 +80,7 @@ export const DeleteWrap = ({
           <Button onClick={() => setOpen(false)} variant="ghost">
             Cancel
           </Button>
-          <Button onClick={() => mutate} disabled={isPending}>
+          <Button onClick={() => mutate()} disabled={isPending}>
             {isPending && <Loader2 className="animate-spin" />}
             Delete
           </Button>

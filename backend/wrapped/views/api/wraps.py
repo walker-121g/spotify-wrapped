@@ -14,7 +14,6 @@ def get_wraps(request):
         user = User.objects.get(email=email)
         wraps = Wrap.objects.filter(
             wrapuser__user=user,
-            wrapuser__accepted=True,
             wrapuser__owner=True
         ).prefetch_related(
             'wrapuser_set__user',
@@ -67,7 +66,6 @@ def get_shared_wraps(request):
         user = User.objects.get(email=email)
         wraps = Wrap.objects.filter(
             wrapuser__user=user,
-            wrapuser__accepted=True,
             wrapuser__owner=False
         ).prefetch_related(
             'wrapuser_set__user',
