@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Fullscreen } from "lucide-react"; // Assuming this is an icon for fullscreen
+import { Fullscreen } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getWraps } from "@/services/wrap.service";
@@ -35,16 +36,37 @@ function WrapDetail() {
   }
 
   const wrap = wraps.find((wrap) => wrap.id === Number(wrapId));
-
   if (!wrap) {
     return <div>Wrap not found!</div>;
   }
+
   const totalSlides = 8;
+  //const backgroundImages = [
+  //  "url-to-image-1.jpg", // replace with actual URLs or dynamic sources (i think for now, basic solid color BGs work)
+  //  "url-to-image-2.jpg",
+  //  "url-to-image-3.jpg",
+  //  "url-to-image-4.jpg",
+  //  "url-to-image-5.jpg",
+  //  "url-to-image-6.jpg",
+  //  "url-to-image-7.jpg",
+  //  "url-to-image-8.jpg",
+  //];
+
+  const backgroundColors = ["#f46ebe", "#96f0b6", "#202f72", "#6a00ba", "#ff8b1c", "#ebf55e", "#ff5a49", "#c6dffb"]; // for the bg colors as opposed to images
+  const slideData = [ // all of these need actual data, but yeah idk how to really retrieve it :/
+    { title: "My Top Genres", value: 0}, // 
+    { title: "Most Listened Countries", value: 0}, // maybe top 5? maybe just top 1
+    { title: "You played X songs in Y", value: 0}, // X = total songs played, Y = time span? since it's not a year it's hard to say: maybe also include total minutes listened over the time span
+    { title: "Your top song was $Top Track$ by $Artist$", value: 0}, // include subdata with total times played how many minutes that is? (times played * track length)
+    { title: "My Top Tracks", value: 0}, // top 5, we can include the cover art, artist name (and maybe album name) for each one
+    { title: "Say hello to your top artist, $Top Artist$", value: 0 }, // can also include how many times listened and how many minutes that is (i.e 1000 plays and 9000 minutes listened)
+    { title: "My Top Artists", value: 0}, // top 5 artists, maybe also include total i.e. "you listened to X artists this year, but one came out on top"
+    { title: "Summary", value: 0}, // potentially include everything (top artists, top songs, minutes listened, and top genre)
+  ];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
-
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
@@ -56,6 +78,7 @@ function WrapDetail() {
         <Button
           variant="outline"
           onClick={() => setIsFullscreen(!isFullscreen)}
+          className="fullscreen-toggle"
         >
           <Fullscreen />
           {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
@@ -63,21 +86,39 @@ function WrapDetail() {
       </header>
 
       <div className={`content ${isFullscreen ? "fullscreen" : ""}`}>
-        {/* placeholder content */}
-        <div className="slide">
-          <h2>{wrap.tracks[currentSlide].id}</h2>
+        <div
+          className="slide"
+          style={{
+            // backgroundImage: `url(${backgroundImages[currentSlide]})`, // for if we decide we want to swap to images
+            // backgroundSize: "cover",
+            // backgroundPosition: "center",
+            backgroundColor: backgroundColors[currentSlide], // using this for now
+          }}
+        >
+          <h2>{slideData[currentSlide].title}</h2>
+          <p>{slideData[currentSlide].value}</p>
         </div>
 
-        {/* Slide navigation */}
         <div className="slide-navigation">
           <Button onClick={prevSlide}>Previous</Button>
           <Button onClick={nextSlide}>Next</Button>
         </div>
+
+        {isFullscreen && (
+          <Button
+            variant="outline"
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="exit-fullscreen-btn"
+          >
+            <X />
+          </Button>
+        )}
       </div>
 
       <style>{`
         .content {
           transition: all 0.3s ease;
+          position: relative;
         }
         .fullscreen {
           position: fixed;
@@ -88,11 +129,48 @@ function WrapDetail() {
           background: white;
           z-index: 1000;
           padding: 16px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        .slide {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          color: white;
+          text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+          padding: 20px;
+        }
+        .slide h2 {
+          font-size: 2rem;
+        }
+        .slide p {
+          font-size: 1.5rem;
         }
         .slide-navigation {
           margin-top: 16px;
           display: flex;
           justify-content: space-between;
+        }
+
+        .exit-fullscreen-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 1100;
+        background: rgba(0, 0, 0, 0.4); /* subtle dark background */
+        color: white;
+        opacity: 0.7;
+        border-radius: 12px;
+        padding: 8px 12px;
+        transition: opacity 0.3s ease;
+        }
+
+        .exit-fullscreen-btn:hover {
+          opacity: 1;
+          background: rgba(0, 0, 0, 0.6);
         }
       `}</style>
     </div>
