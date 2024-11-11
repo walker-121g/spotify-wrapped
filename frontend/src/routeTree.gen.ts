@@ -22,6 +22,7 @@ import { Route as AppSettingsImport } from './routes/app/settings'
 import { Route as AppSearchImport } from './routes/app/search'
 import { Route as AppProfileImport } from './routes/app/profile'
 import { Route as AppMessagesImport } from './routes/app/messages'
+import { Route as AppGamesImport } from './routes/app/games'
 import { Route as AppWrapsIndexImport } from './routes/app/wraps/index'
 import { Route as AppWrapsNewImport } from './routes/app/wraps/new'
 import { Route as AppProfilesIdImport } from './routes/app/profiles/$id'
@@ -95,6 +96,12 @@ const AppMessagesRoute = AppMessagesImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppGamesRoute = AppGamesImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppWrapsIndexRoute = AppWrapsIndexImport.update({
   id: '/wraps/',
   path: '/wraps/',
@@ -165,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/app/games': {
+      id: '/app/games'
+      path: '/games'
+      fullPath: '/app/games'
+      preLoaderRoute: typeof AppGamesImport
+      parentRoute: typeof AppImport
+    }
     '/app/messages': {
       id: '/app/messages'
       path: '/messages'
@@ -234,6 +248,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AppRouteChildren {
+  AppGamesRoute: typeof AppGamesRoute
   AppMessagesRoute: typeof AppMessagesRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSearchRoute: typeof AppSearchRoute
@@ -246,6 +261,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppGamesRoute: AppGamesRoute,
   AppMessagesRoute: AppMessagesRoute,
   AppProfileRoute: AppProfileRoute,
   AppSearchRoute: AppSearchRoute,
@@ -266,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/games': typeof AppGamesRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/profile': typeof AppProfileRoute
   '/app/search': typeof AppSearchRoute
@@ -283,6 +300,7 @@ export interface FileRoutesByTo {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/games': typeof AppGamesRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/profile': typeof AppProfileRoute
   '/app/search': typeof AppSearchRoute
@@ -302,6 +320,7 @@ export interface FileRoutesById {
   '/contact-us': typeof ContactUsRoute
   '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
+  '/app/games': typeof AppGamesRoute
   '/app/messages': typeof AppMessagesRoute
   '/app/profile': typeof AppProfileRoute
   '/app/search': typeof AppSearchRoute
@@ -322,6 +341,7 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/demo'
     | '/login'
+    | '/app/games'
     | '/app/messages'
     | '/app/profile'
     | '/app/search'
@@ -338,6 +358,7 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/demo'
     | '/login'
+    | '/app/games'
     | '/app/messages'
     | '/app/profile'
     | '/app/search'
@@ -355,6 +376,7 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/demo'
     | '/login'
+    | '/app/games'
     | '/app/messages'
     | '/app/profile'
     | '/app/search'
@@ -414,6 +436,7 @@ export const routeTree = rootRoute
     "/app": {
       "filePath": "app.tsx",
       "children": [
+        "/app/games",
         "/app/messages",
         "/app/profile",
         "/app/search",
@@ -433,6 +456,10 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/app/games": {
+      "filePath": "app/games.tsx",
+      "parent": "/app"
     },
     "/app/messages": {
       "filePath": "app/messages.tsx",

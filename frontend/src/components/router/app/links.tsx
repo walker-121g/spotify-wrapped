@@ -80,6 +80,13 @@ export const NavLinks = ({ expanded }: { expanded: boolean }) => {
         name="Messages"
         icon={<Mail />}
       />
+      <NavLink
+        expanded={expanded}
+        locations={["/app/games", "/app/games/"]}
+        href="/app/games"
+        name="Games"
+        icon={<Settings />}
+      />
       <div className="flex flex-col gap-2 my-4">
         <span className={`${expanded ? "text-md" : "text-xs"} font-semibold`}>
           Wraps
