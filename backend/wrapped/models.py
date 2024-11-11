@@ -96,3 +96,13 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f'{self.email}'
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.follower} - {self.following}'
