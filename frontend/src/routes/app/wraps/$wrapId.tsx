@@ -56,12 +56,12 @@ function WrapDetail() {
   const slideData = [ // all of these need actual data, but yeah idk how to really retrieve it :/
     { title: "My Top Genres", value: 0}, // 
     { title: "Most Listened Countries", value: 0}, // maybe top 5? maybe just top 1
-    { title: "You played X songs in Y", value: 0}, // X = total songs played, Y = time span? since it's not a year it's hard to say: maybe also include total minutes listened over the time span
-    { title: "Your top song was $Top Track$ by $Artist$", value: 0}, // include subdata with total times played how many minutes that is? (times played * track length)
+    { title: "You played X songs", description: "That's a total of $MINUTES$ minutes", value: 0}, // X = total songs played. im hoping we can find the total minutes listened as well.
+    { title: "Your top song was $Top Track$ by $Artist$", description: "You played it $PLAYS$ times. That's $MINUTES$ minutes, and it still sounds perfect.", value: 0}, // (times played * track length)
     { title: "My Top Tracks", value: 0}, // top 5, we can include the cover art, artist name (and maybe album name) for each one
-    { title: "Say hello to your top artist, $Top Artist$", value: 0 }, // can also include how many times listened and how many minutes that is (i.e 1000 plays and 9000 minutes listened)
+    { title: "Say hello to your top artist, $Top Artist$", description: "You spent $MINUTES$ minutes together, more than any of your $numArtists?$ other artists.", value: 0 }, // can also include number of plays
     { title: "My Top Artists", value: 0}, // top 5 artists, maybe also include total i.e. "you listened to X artists this year, but one came out on top"
-    { title: "Summary", value: 0}, // potentially include everything (top artists, top songs, minutes listened, and top genre)
+    { value: 0}, // potentially include everything (top artists, top songs, minutes listened, and top genre)
   ];
 
   const nextSlide = () => {
@@ -92,7 +92,7 @@ function WrapDetail() {
             // backgroundImage: `url(${backgroundImages[currentSlide]})`, // for if we decide we want to swap to images
             // backgroundSize: "cover",
             // backgroundPosition: "center",
-            backgroundColor: backgroundColors[currentSlide], // using this for now
+            backgroundColor: backgroundColors[currentSlide], // using this for now, if we use images we can delete this
           }}
         >
           <h2>{slideData[currentSlide].title}</h2>
@@ -160,7 +160,7 @@ function WrapDetail() {
         top: 16px;
         right: 16px;
         z-index: 1100;
-        background: rgba(0, 0, 0, 0.4); /* subtle dark background */
+        background: rgba(0, 0, 0, 0.4);
         color: white;
         opacity: 0.7;
         border-radius: 12px;
