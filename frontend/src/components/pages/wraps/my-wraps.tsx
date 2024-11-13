@@ -1,21 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
 
 import { getWraps } from "@/services/wrap.service";
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { NoWraps } from "./no-wraps";
+import { Wrap } from "./wrap";
 
 export const MyWraps = () => {
-  const router = useRouter();
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, refetch } = useQuery({
     queryKey: ["my", "wraps"],
     queryFn: async () => await getWraps(),
   });
@@ -29,6 +21,7 @@ export const MyWraps = () => {
       {data
         .filter((wrap) => !wrap.users.some((user) => !user.accepted))
         .map((wrap) => (
+<<<<<<< HEAD
           <Card
             key={wrap.name}
             onClick={() => {
@@ -56,6 +49,9 @@ export const MyWraps = () => {
               </span>
             </CardContent>
           </Card>
+=======
+          <Wrap key={wrap.id} wrap={wrap} refetch={refetch} />
+>>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
         ))}
     </div>
   ) : (

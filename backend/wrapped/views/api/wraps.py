@@ -14,7 +14,6 @@ def get_wraps(request):
         user = User.objects.get(email=email)
         wraps = Wrap.objects.filter(
             wrapuser__user=user,
-            wrapuser__accepted=True,
             wrapuser__owner=True
         ).prefetch_related(
             'wrapuser_set__user',
@@ -67,7 +66,6 @@ def get_shared_wraps(request):
         user = User.objects.get(email=email)
         wraps = Wrap.objects.filter(
             wrapuser__user=user,
-            wrapuser__accepted=True,
             wrapuser__owner=False
         ).prefetch_related(
             'wrapuser_set__user',
@@ -152,6 +150,34 @@ def create_wrap(request):
                     wrap_track.save()
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
+
+        return JsonResponse({"success": True}, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
+def delete_wrap(request):
+    if request.method == "POST":
+        email = request.user_email
+        data = json.loads(request.body)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return JsonResponse({"error": "User does not exist"}, status=400)
+
+        try:
+            wrap = Wrap.objects.get(id=data["id"])
+        except Wrap.DoesNotExist:
+            return JsonResponse({"error": "Wrap does not exist"}, status=400)
+
+        try:
+            wrap_user = WrapUser.objects.get(user=user, wrap=wrap)
+            if wrap_user.accepted:
+                wrap.delete()
+        except WrapUser.DoesNotExist:
+            return JsonResponse({"error": "User is not part of the wrap"}, status=400)
 
         return JsonResponse({"success": True}, status=200)
     else:

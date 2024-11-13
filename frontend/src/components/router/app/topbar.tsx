@@ -31,7 +31,7 @@ export const Topbar = () => {
   const theme = useTheme();
 
   return (
-    <div className="w-full p-8 flex flex-row justify-between items-center">
+    <div className="w-full p-8 flex flex-row justify-between items-center border-b">
       <Sheet>
         <SheetTrigger asChild className="sm:invisible">
           <Button variant="outline" size="icon">
