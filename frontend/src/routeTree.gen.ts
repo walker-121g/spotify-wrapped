@@ -24,12 +24,9 @@ import { Route as AppProfileImport } from './routes/app/profile'
 import { Route as AppMessagesImport } from './routes/app/messages'
 import { Route as AppWrapsIndexImport } from './routes/app/wraps/index'
 import { Route as AppWrapsNewImport } from './routes/app/wraps/new'
-<<<<<<< HEAD
 import { Route as AppWrapsWrapIdImport } from './routes/app/wraps/$wrapId'
-=======
 import { Route as AppProfilesIdImport } from './routes/app/profiles/$id'
 import { Route as AppPostsIdImport } from './routes/app/posts/$id'
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
 
 // Create/Update Routes
 
@@ -111,11 +108,12 @@ const AppWrapsNewRoute = AppWrapsNewImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-<<<<<<< HEAD
 const AppWrapsWrapIdRoute = AppWrapsWrapIdImport.update({
   id: '/wraps/$wrapId',
   path: '/wraps/$wrapId',
-=======
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppProfilesIdRoute = AppProfilesIdImport.update({
   id: '/profiles/$id',
   path: '/profiles/$id',
@@ -125,7 +123,6 @@ const AppProfilesIdRoute = AppProfilesIdImport.update({
 const AppPostsIdRoute = AppPostsIdImport.update({
   id: '/posts/$id',
   path: '/posts/$id',
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -210,13 +207,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppImport
     }
-<<<<<<< HEAD
-    '/app/wraps/$wrapId': {
-      id: '/app/wraps/$wrapId'
-      path: '/wraps/$wrapId'
-      fullPath: '/app/wraps/$wrapId'
-      preLoaderRoute: typeof AppWrapsWrapIdImport
-=======
     '/app/posts/$id': {
       id: '/app/posts/$id'
       path: '/posts/$id'
@@ -229,7 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/profiles/$id'
       fullPath: '/app/profiles/$id'
       preLoaderRoute: typeof AppProfilesIdImport
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+      parentRoute: typeof AppImport
+    }
+    '/app/wraps/$wrapId': {
+      id: '/app/wraps/$wrapId'
+      path: '/wraps/$wrapId'
+      fullPath: '/app/wraps/$wrapId'
+      preLoaderRoute: typeof AppWrapsWrapIdImport
       parentRoute: typeof AppImport
     }
     '/app/wraps/new': {
@@ -257,12 +253,9 @@ interface AppRouteChildren {
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
-<<<<<<< HEAD
-  AppWrapsWrapIdRoute: typeof AppWrapsWrapIdRoute
-=======
   AppPostsIdRoute: typeof AppPostsIdRoute
   AppProfilesIdRoute: typeof AppProfilesIdRoute
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+  AppWrapsWrapIdRoute: typeof AppWrapsWrapIdRoute
   AppWrapsNewRoute: typeof AppWrapsNewRoute
   AppWrapsIndexRoute: typeof AppWrapsIndexRoute
 }
@@ -273,12 +266,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
-<<<<<<< HEAD
-  AppWrapsWrapIdRoute: AppWrapsWrapIdRoute,
-=======
   AppPostsIdRoute: AppPostsIdRoute,
   AppProfilesIdRoute: AppProfilesIdRoute,
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+  AppWrapsWrapIdRoute: AppWrapsWrapIdRoute,
   AppWrapsNewRoute: AppWrapsNewRoute,
   AppWrapsIndexRoute: AppWrapsIndexRoute,
 }
@@ -297,12 +287,9 @@ export interface FileRoutesByFullPath {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-<<<<<<< HEAD
-  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
-=======
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps': typeof AppWrapsIndexRoute
 }
@@ -318,12 +305,9 @@ export interface FileRoutesByTo {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
-<<<<<<< HEAD
-  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
-=======
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps': typeof AppWrapsIndexRoute
 }
@@ -341,12 +325,9 @@ export interface FileRoutesById {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-<<<<<<< HEAD
-  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
-=======
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+  '/app/wraps/$wrapId': typeof AppWrapsWrapIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps/': typeof AppWrapsIndexRoute
 }
@@ -365,12 +346,9 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app/'
-<<<<<<< HEAD
-    | '/app/wraps/$wrapId'
-=======
     | '/app/posts/$id'
     | '/app/profiles/$id'
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+    | '/app/wraps/$wrapId'
     | '/app/wraps/new'
     | '/app/wraps'
   fileRoutesByTo: FileRoutesByTo
@@ -385,12 +363,9 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app'
-<<<<<<< HEAD
-    | '/app/wraps/$wrapId'
-=======
     | '/app/posts/$id'
     | '/app/profiles/$id'
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+    | '/app/wraps/$wrapId'
     | '/app/wraps/new'
     | '/app/wraps'
   id:
@@ -406,12 +381,9 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app/'
-<<<<<<< HEAD
-    | '/app/wraps/$wrapId'
-=======
     | '/app/posts/$id'
     | '/app/profiles/$id'
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+    | '/app/wraps/$wrapId'
     | '/app/wraps/new'
     | '/app/wraps/'
   fileRoutesById: FileRoutesById
@@ -469,12 +441,9 @@ export const routeTree = rootRoute
         "/app/search",
         "/app/settings",
         "/app/",
-<<<<<<< HEAD
-        "/app/wraps/$wrapId",
-=======
         "/app/posts/$id",
         "/app/profiles/$id",
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+        "/app/wraps/$wrapId",
         "/app/wraps/new",
         "/app/wraps/"
       ]
@@ -508,17 +477,16 @@ export const routeTree = rootRoute
       "filePath": "app/index.tsx",
       "parent": "/app"
     },
-<<<<<<< HEAD
-    "/app/wraps/$wrapId": {
-      "filePath": "app/wraps/$wrapId.tsx",
-=======
     "/app/posts/$id": {
       "filePath": "app/posts/$id.tsx",
       "parent": "/app"
     },
     "/app/profiles/$id": {
       "filePath": "app/profiles/$id.tsx",
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
+      "parent": "/app"
+    },
+    "/app/wraps/$wrapId": {
+      "filePath": "app/wraps/$wrapId.tsx",
       "parent": "/app"
     },
     "/app/wraps/new": {

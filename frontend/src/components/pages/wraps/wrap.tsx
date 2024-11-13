@@ -59,7 +59,7 @@ export const Wrap = ({
             <DropdownMenuItem
               onClick={() => {
                 router.navigate({
-                  to: `/app/wrap/${wrap.id}`,
+                  to: `/app/wraps/${wrap.id}`,
                 });
               }}
             >

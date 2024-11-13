@@ -19,40 +19,6 @@ export const SharedWraps = () => {
       <Loader2 className="animate-spin" />
     </div>
   ) : data.length > 0 ? (
-<<<<<<< HEAD
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {data
-        .filter((wrap) => !wrap.users.some((user) => !user.accepted))
-        .map((wrap) => (
-          <Card
-            key={wrap.name}
-            onClick={() => {
-              router.navigate({
-                to: `/app/wraps/${wrap.id}`,
-              });
-            }}
-            className="cursor-pointer"
-          >
-            <CardHeader>
-              <CardTitle>{wrap.name}</CardTitle>
-              <CardDescription>
-                {wrap.period
-                  .split("_")
-                  .map((p) => `${p.charAt(0).toUpperCase()}${p.substring(1)}`)
-                  .join(" ")}{" "}
-                - {new Date(wrap.created_at).toLocaleDateString()}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <span className="text-sm">
-                {wrap.artists.length} album{wrap.artists.length !== 1 && "s"} /{" "}
-                {wrap.tracks.length} track{wrap.tracks.length !== 1 && "s"} /{" "}
-                {wrap.users.length} user{wrap.users.length !== 1 && "s"}
-              </span>
-            </CardContent>
-          </Card>
-        ))}
-=======
     <div className="flex flex-col gap-8">
       {data.filter((wrap) =>
         wrap.users.some(
@@ -76,7 +42,7 @@ export const SharedWraps = () => {
                 ),
               )
               .map((wrap) => (
-                <Wrap key={wrap.id} wrap={wrap} refetch={refetch} acceptable />
+                <Wrap key={wrap.id} wrap={wrap} refetch={refetch} />
               ))}
           </div>
         </div>
@@ -93,7 +59,6 @@ export const SharedWraps = () => {
             ))}
         </div>
       </div>
->>>>>>> a7130378820f6822cd2eabeda53b4259af7e31f7
     </div>
   ) : (
     <NoWraps />
