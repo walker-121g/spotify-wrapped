@@ -3,6 +3,20 @@ import { http } from "./http.service";
 import { logErr } from "@/lib/utils";
 import { Wrap, WrapPreview } from "./types/wrap";
 
+export const getWrap = async (id: number): Promise<Wrap> => {
+  try {
+    const result = await http<Wrap>("GET", "/wraps/wrap?id=" + id);
+    return result;
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to fetch wraps");
+    }
+  }
+};
+
 export const getWraps = async (): Promise<Wrap[]> => {
   try {
     const result = await http<Wrap[]>("GET", "/wraps");
@@ -54,7 +68,7 @@ export const createWrap = async (wrap: {
 
 export const updateWrap = async (
   id: number,
-  accept: boolean,
+  accept: boolean
 ): Promise<boolean> => {
   try {
     const result = await http<boolean>(
@@ -62,7 +76,7 @@ export const updateWrap = async (
       accept ? "/wraps/accept" : "/wraps/decline",
       {
         body: JSON.stringify({ wrap_id: id }),
-      },
+      }
     );
 
     return result;
@@ -72,7 +86,7 @@ export const updateWrap = async (
       throw error;
     } else {
       throw new SafeError(
-        "Failed to " + accept ? "accept" : "decline" + " wrap",
+        "Failed to " + accept ? "accept" : "decline" + " wrap"
       );
     }
   }
@@ -96,12 +110,12 @@ export const deleteWrap = async (id: number): Promise<boolean> => {
 };
 
 export const previewWrap = async (
-  period: Wrap["period"],
+  period: Wrap["period"]
 ): Promise<WrapPreview> => {
   try {
     const result = await http<WrapPreview>(
       "GET",
-      "/wraps/preview?period=" + period,
+      "/wraps/preview?period=" + period
     );
 
     return result;
