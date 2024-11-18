@@ -26,13 +26,16 @@ import { PostWrap } from "./post-wrap";
 export const Wrap = ({
   wrap,
   refetch,
+  acceptable
 }: {
   wrap: WrapType;
   refetch: (
     options?: RefetchOptions,
   ) => Promise<QueryObserverResult<WrapType[], Error>>;
+  acceptable?: true;
 }) => {
   const router = useRouter();
+  console.log(acceptable);
 
   return (
     <Card key={wrap.name}>
