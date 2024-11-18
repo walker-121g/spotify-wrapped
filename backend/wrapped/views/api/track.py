@@ -1,12 +1,12 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import requests
+from wrapped.views.api.wraps import get_wraps
 
 
 @csrf_exempt
 def get_track(request, id):
     if request.method == "GET":
-        auth_header = request.headers.get("Authorization")
+        resp = get_wraps(request)
 
         session = requests.Session()
         headers = {
