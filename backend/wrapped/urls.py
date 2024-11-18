@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout, delete_account
-from wrapped.views.api.wraps import get_wraps, get_shared_wraps, create_wrap
+from wrapped.views.api.wraps import get_wrap, get_wraps, get_shared_wraps, create_wrap
 from wrapped.views.api.wraps import delete_wrap, accept_wrap, decline_wrap, preview_wrap
 from wrapped.views.api.feedback import create_feedback
 from wrapped.views.api.album import get_user_albums, get_album, get_albums, get_album_tracks
@@ -48,6 +48,11 @@ urlpatterns = [
         "api/wraps",
         get_wraps,
         name="get_wraps",
+    ),
+    path(
+        "api/wraps/wrap",
+        get_wrap,
+        name="get_wrap"
     ),
     path(
         "api/wraps/shared",
