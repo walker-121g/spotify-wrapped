@@ -7,51 +7,82 @@ from wrapped.utils.spotify.users import get_top_tracks, get_top_artists
 
 
 @csrf_exempt
+def get_wrap(request):
+    if request.method == "GET":
+        id = request.GET.get("id")
+
+        wrap = Wrap.objects.filter(id=id).select_related(
+            "wrapuser_set__user", "wrapartist_set", "wraptrack_set"
+        )
+
+        wrap_data = {
+            "id": wrap[0].id,
+            "name": wrap[0].name,
+            "period": wrap[0].time_period,
+            "users": [
+                {
+                    "email": wrap_user.user.email,
+                    "name": wrap_user.user.name,
+                    "owner": wrap_user.owner,
+                    "accepted": wrap_user.accepted,
+                }
+                for wrap_user in wrap[0].wrapuser_set.all()
+            ],
+            "artists": [
+                {"id": artist.id, "listen_time": artist.listen_time}
+                for artist in wrap[0].wrapartist_set.all()
+            ],
+            "tracks": [
+                {"id": track.id, "listen_time": track.listen_time}
+                for track in wrap[0].wraptrack_set.all()
+            ],
+            "created_at": wrap[0].created_at,
+        }
+
+        return JsonResponse(wrap_data, safe=False, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
 def get_wraps(request):
     if request.method == "GET":
         email = request.user_email
 
         user = User.objects.get(email=email)
-        wraps = Wrap.objects.filter(
-            wrapuser__user=user,
-            wrapuser__owner=True
-        ).prefetch_related(
-            'wrapuser_set__user',
-            'wrapartist_set',
-            'wraptrack_set'
-        ).distinct()
+        wraps = (
+            Wrap.objects.filter(wrapuser__user=user, wrapuser__owner=True)
+            .prefetch_related("wrapuser_set__user", "wrapartist_set", "wraptrack_set")
+            .distinct()
+        )
 
         wraps_data = []
         for wrap in wraps:
-            wraps_data.append({
-                'id': wrap.id,
-                'name': wrap.name,
-                'period': wrap.time_period,
-                'users': [
-                    {
-                        'email': wrap_user.user.email,
-                        'name': wrap_user.user.name,
-                        'owner': wrap_user.owner,
-                        'accepted': wrap_user.accepted,
-                    }
-                    for wrap_user in wrap.wrapuser_set.all()
-                ],
-                'artists': [
-                    {
-                        'id': artist.id,
-                        'listen_time': artist.listen_time
-                    }
-                    for artist in wrap.wrapartist_set.all()
-                ],
-                'tracks': [
-                    {
-                        'id': track.id,
-                        'listen_time': track.listen_time
-                    }
-                    for track in wrap.wraptrack_set.all()
-                ],
-                'created_at': wrap.created_at
-            })
+            wraps_data.append(
+                {
+                    "id": wrap.id,
+                    "name": wrap.name,
+                    "period": wrap.time_period,
+                    "users": [
+                        {
+                            "email": wrap_user.user.email,
+                            "name": wrap_user.user.name,
+                            "owner": wrap_user.owner,
+                            "accepted": wrap_user.accepted,
+                        }
+                        for wrap_user in wrap.wrapuser_set.all()
+                    ],
+                    "artists": [
+                        {"id": artist.id, "listen_time": artist.listen_time}
+                        for artist in wrap.wrapartist_set.all()
+                    ],
+                    "tracks": [
+                        {"id": track.id, "listen_time": track.listen_time}
+                        for track in wrap.wraptrack_set.all()
+                    ],
+                    "created_at": wrap.created_at,
+                }
+            )
 
         return JsonResponse(list(wraps_data), safe=False, status=200)
     else:
@@ -64,46 +95,39 @@ def get_shared_wraps(request):
         email = request.user_email
 
         user = User.objects.get(email=email)
-        wraps = Wrap.objects.filter(
-            wrapuser__user=user,
-            wrapuser__owner=False
-        ).prefetch_related(
-            'wrapuser_set__user',
-            'wrapartist_set',
-            'wraptrack_set'
-        ).distinct()
+        wraps = (
+            Wrap.objects.filter(wrapuser__user=user, wrapuser__owner=False)
+            .prefetch_related("wrapuser_set__user", "wrapartist_set", "wraptrack_set")
+            .distinct()
+        )
 
         wraps_data = []
         for wrap in wraps:
-            wraps_data.append({
-                'id': wrap.id,
-                'name': wrap.name,
-                'period': wrap.time_period,
-                'users': [
-                    {
-                        'email': wrap_user.user.email,
-                        'name': wrap_user.user.name,
-                        'owner': wrap_user.owner,
-                        'accepted': wrap_user.accepted,
-                    }
-                    for wrap_user in wrap.wrapuser_set.all()
-                ],
-                'artists': [
-                    {
-                        'id': artist.id,
-                        'listen_time': artist.listen_time
-                    }
-                    for artist in wrap.wrapartist_set.all()
-                ],
-                'tracks': [
-                    {
-                        'id': track.id,
-                        'listen_time': track.listen_time
-                    }
-                    for track in wrap.wraptrack_set.all()
-                ],
-                'created_at': wrap.created_at
-            })
+            wraps_data.append(
+                {
+                    "id": wrap.id,
+                    "name": wrap.name,
+                    "period": wrap.time_period,
+                    "users": [
+                        {
+                            "email": wrap_user.user.email,
+                            "name": wrap_user.user.name,
+                            "owner": wrap_user.owner,
+                            "accepted": wrap_user.accepted,
+                        }
+                        for wrap_user in wrap.wrapuser_set.all()
+                    ],
+                    "artists": [
+                        {"id": artist.id, "listen_time": artist.listen_time}
+                        for artist in wrap.wrapartist_set.all()
+                    ],
+                    "tracks": [
+                        {"id": track.id, "listen_time": track.listen_time}
+                        for track in wrap.wraptrack_set.all()
+                    ],
+                    "created_at": wrap.created_at,
+                }
+            )
 
         return JsonResponse(list(wraps_data), safe=False, status=200)
     else:
@@ -133,16 +157,22 @@ def create_wrap(request):
                 for invite in data["users"]:
                     try:
                         invite_user = User.objects.get(email=invite)
-                        wrap_invite = WrapUser(user=invite_user, wrap=wrap, owner=False, accepted=False)
+                        wrap_invite = WrapUser(
+                            user=invite_user, wrap=wrap, owner=False, accepted=False
+                        )
                         wrap_invite.save()
                     except User.DoesNotExist:
-                        return JsonResponse({"error": f'User {invite} does not exist'}, status=400)
+                        return JsonResponse(
+                            {"error": f"User {invite} does not exist"}, status=400
+                        )
 
                 top_tracks = get_top_tracks(data["period"], auth_header)
                 top_artists = get_top_artists(data["period"], auth_header)
 
                 for artist in top_artists:
-                    wrap_artist = WrapArtist(artist=artist["id"], wrap=wrap, listen_time=0)
+                    wrap_artist = WrapArtist(
+                        artist=artist["id"], wrap=wrap, listen_time=0
+                    )
                     wrap_artist.save()
 
                 for track in top_tracks:
@@ -246,7 +276,10 @@ def decline_wrap(request):
             if not wrap_user["owner"] and not wrap_user["accepted"]:
                 wrap.delete()
             else:
-                return JsonResponse({"error": "User is the owner of the wrap or has already accepted"}, status=400)
+                return JsonResponse(
+                    {"error": "User is the owner of the wrap or has already accepted"},
+                    status=400,
+                )
         except WrapUser.DoesNotExist:
             return JsonResponse({"error": "User is not part of the wrap"}, status=400)
 
@@ -264,9 +297,8 @@ def preview_wrap(request):
         top_tracks = get_top_tracks(period, auth_header)
         top_artists = get_top_artists(period, auth_header)
 
-        return JsonResponse({
-            "tracks": top_tracks,
-            "artists": top_artists
-        }, status=200, safe=False)
+        return JsonResponse(
+            {"tracks": top_tracks, "artists": top_artists}, status=200, safe=False
+        )
     else:
         return HttpResponse("Invalid request method")
