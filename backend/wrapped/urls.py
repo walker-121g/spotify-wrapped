@@ -10,6 +10,7 @@ from wrapped.views.api.artists import get_related_artists, get_top_tracks
 from wrapped.views.api.follow import get_following, follow
 from wrapped.views.api.post import get_posts, get_following_posts, create_post, delete_post, like, comment
 from wrapped.views.frontend import index
+from wrapped.views.api.gemini import create_story
 
 
 urlpatterns = [
@@ -182,6 +183,11 @@ urlpatterns = [
         "api/posts/comment",
         comment,
         name="comment",
+    ),
+    path(
+        "api/gemini/story/create",
+        create_story,
+        name="create_story",
     ),
     re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]
