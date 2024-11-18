@@ -72,11 +72,10 @@ describe ("<Mock Test />", () => {
   test("auth.store.ts test, useAuth invalid token", () => {
     const tok = useAuth.getState().token;
     expect(tok).toEqual(undefined);
-    
-  })
+  });
 })
 
-const auth = nock('http://localhost:8000/api')
+nock('http://localhost:8000/api')
   .get('/auth/token')
   .replyWithError({
     status: 400,
@@ -84,7 +83,7 @@ const auth = nock('http://localhost:8000/api')
   })
   
 
-const scope = nock('https://api.spotify.com')
+nock('https://api.spotify.com')
   .get('/v1/me')
   .reply(200, {
       country: "America",
