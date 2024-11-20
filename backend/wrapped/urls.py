@@ -11,6 +11,7 @@ from wrapped.views.api.follow import get_following, follow
 from wrapped.views.api.post import get_posts, get_following_posts, create_post, delete_post, like, comment
 from wrapped.views.frontend import index
 from wrapped.views.api.gemini import create_story
+from wrapped.views.api.track import get_track
 
 
 urlpatterns = [
@@ -98,6 +99,11 @@ urlpatterns = [
         "api/albums/<str:id>",
         get_album,
         name="get_album"
+    ),
+    path(
+        "api/tracks/<str:id>",
+        get_track,
+        name="get_track"
     ),
     path(
         "api/albums",

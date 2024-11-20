@@ -2,6 +2,8 @@ import SafeError from "@/lib/safe-error";
 import { http } from "./http.service";
 import { logErr } from "@/lib/utils";
 import { Wrap, WrapPreview } from "./types/wrap";
+import { getArtist } from "./artists.service";
+import { getTrack } from "./track.service";
 
 export const getWrap = async (id: number): Promise<Wrap> => {
   try {
@@ -13,6 +15,32 @@ export const getWrap = async (id: number): Promise<Wrap> => {
       throw error;
     } else {
       throw new SafeError("Failed to fetch wraps");
+    }
+  }
+};
+
+export const getWrapInfo = async (wrap: Wrap): Promise<WrapPreview> => {
+  try {
+    const result: WrapPreview = {
+      tracks: [],
+      artists: [],
+    };
+
+    for (const track of wrap.tracks.splice(0, 10)) {
+      result.tracks.push(await getTrack(track.id) as WrapPreview["tracks"][0]);
+    }
+
+    for (const artist of wrap.artists.splice(0, 10)) {
+      result.artists.push(await getArtist(artist.id) as WrapPreview["artists"][0]);
+    }
+
+    return result;
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to fetch wrap tracks and artists");
     }
   }
 };
