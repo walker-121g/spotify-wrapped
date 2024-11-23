@@ -10,7 +10,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LikeButton } from "./like-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +21,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical, Eye, MessageSquareText } from "lucide-react";
+import { Follow } from "../follow";
 
 export const PostPreview = ({
   post,
@@ -35,18 +35,10 @@ export const PostPreview = ({
   return (
     <Card key={post.id} ref={ref}>
       <CardHeader className="flex flex-row justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Avatar>
-            <AvatarImage src="" alt="avatar" />
-            <AvatarFallback>{post.user.name[0]}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-1">
-            <CardTitle>{post.user.name}</CardTitle>
-            <CardDescription>
-              Posted at {new Date(post.created_at).toLocaleString()}
-            </CardDescription>
-          </div>
-        </div>
+        <Follow
+          user={post.user}
+          description={`Posted at ${new Date(post.created_at).toLocaleString()}`}
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
