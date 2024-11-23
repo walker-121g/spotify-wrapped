@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Heart } from "lucide-react";
 
-export const LikeButton = (props: { id: number; count?: number }) => {
+export const LikeButton = (props: {
+  id: number;
+  count?: number;
+  refetch?: () => void;
+}) => {
   const { isPending, data, refetch } = useQuery({
     queryKey: ["postIsLiked", props.id],
     queryFn: async () => await postIsLiked(props.id),
@@ -39,6 +43,9 @@ export const LikeButton = (props: { id: number; count?: number }) => {
   useMemo(() => {
     if (likeSuccess || unlikeSuccess) {
       refetch();
+      if (props.refetch) {
+        props.refetch();
+      }
     }
   }, [likeSuccess, unlikeSuccess]);
 

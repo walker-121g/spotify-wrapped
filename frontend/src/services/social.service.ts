@@ -1,7 +1,7 @@
 import SafeError from "@/lib/safe-error";
 import { http } from "./http.service";
 import { logErr } from "@/lib/utils";
-import { Following, Post } from "./types/social";
+import { Following, Post, PostDetail } from "./types/social";
 
 export const getFollowing = async (): Promise<Following[]> => {
   try {
@@ -46,6 +46,19 @@ export const unfollow = async (email: string): Promise<void> => {
   }
 };
 
+export const getPost = async (id: number): Promise<PostDetail> => {
+  try {
+    return await http<PostDetail>("GET", "/posts/post?id=" + id);
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to fetch post");
+    }
+  }
+};
+
 export const getPosts = async (page: number = 0): Promise<Post[]> => {
   try {
     return await http<Post[]>("GET", "/posts?page=" + page);
@@ -62,6 +75,19 @@ export const getPosts = async (page: number = 0): Promise<Post[]> => {
 export const getFollowingPosts = async (page: number = 0): Promise<Post[]> => {
   try {
     return await http<Post[]>("GET", "/posts/following?page=" + page);
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to fetch following posts");
+    }
+  }
+};
+
+export const getLikedPosts = async (page: number = 0): Promise<Post[]> => {
+  try {
+    return await http<Post[]>("GET", "/posts/likes?page=" + page);
   } catch (error) {
     logErr(error);
     if (error instanceof SafeError) {
@@ -93,7 +119,7 @@ export const post = async (post: {
 
 export const deletePost = async (id: number): Promise<void> => {
   try {
-    await http<{ success: boolean }>("DELETE", "/posts/delete", {
+    await http<{ success: boolean }>("POST", "/posts/delete", {
       body: JSON.stringify({ id }),
     });
   } catch (error) {
