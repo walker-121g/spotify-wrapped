@@ -78,7 +78,7 @@ export const PostPreview = ({
           <MessageSquareText />
           {post.comments}
         </Button>
-        <LikeButton id={post.id} count={post.likes} />
+        <LikeButton id={post.id} />
       </CardFooter>
     </Card>
   );
