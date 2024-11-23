@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2, UserPlus, UserMinus } from "lucide-react";
+import { toast } from "sonner";
 
 export const Follow = ({
   user,
@@ -22,7 +23,7 @@ export const Follow = ({
 }) => {
   const context = useContext();
 
-  const { isLoading, data, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["following"],
     queryFn: async () => getFollowing(),
   });
@@ -50,6 +51,10 @@ export const Follow = ({
   useMemo(() => {
     if (followSuccess || unfollowSuccess) {
       refetch();
+    } else if (followError) {
+      toast.error(followError);
+    } else if (unfollowError) {
+      toast.error(unfollowError);
     }
   }, [followSuccess, unfollowSuccess]);
 
