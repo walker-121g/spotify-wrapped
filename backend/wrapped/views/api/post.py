@@ -140,7 +140,7 @@ def get_liked_posts(request):
             return HttpResponse("User not found", status=404)
 
         likes = Like.objects.filter(user=user).all()
-        likes = [l.post.id for l in likes]
+        likes = [like.post.id for like in likes]
 
         posts = Post.objects.filter(id__in=likes).order_by('created_at').all()
         posts = posts[(page) * 10:(page + 1) * 10]
