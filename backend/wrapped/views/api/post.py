@@ -6,6 +6,48 @@ from wrapped.models import User, Follow, Post, Like, Comment, Wrap, WrapUser
 
 
 @csrf_exempt
+def get_post(request):
+    if request.method == "GET":
+        try:
+            post = Post.objects.get(id=request.GET.get("id"))
+        except Post.DoesNotExist:
+            return HttpResponse("Post not found", status=404)
+
+        comments = Comment.objects.filter(post=post).select_related("user").all()
+        like_count = Like.objects.filter(post=post).count()
+
+        result = {
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'likes': like_count,
+            'comments': [],
+            'created_at': post.created_at,
+            'user': {
+                'id': post.user.id,
+                'name': post.user.name,
+                'email': post.user.email
+            }
+        }
+
+        for comment in comments:
+            result['comments'].append({
+                'id': comment.id,
+                'content': comment.content,
+                'user': {
+                    'id': comment.user.id,
+                    'name': comment.user.name,
+                    'email': comment.user.email
+                },
+                'created_at': comment.created_at
+            })
+
+        return JsonResponse(result, safe=False, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
 def get_posts(request):
     if request.method == "GET":
         email = request.user_email
