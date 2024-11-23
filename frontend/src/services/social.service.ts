@@ -85,6 +85,19 @@ export const getFollowingPosts = async (page: number = 0): Promise<Post[]> => {
   }
 };
 
+export const getLikedPosts = async (page: number = 0): Promise<Post[]> => {
+  try {
+    return await http<Post[]>("GET", "/posts/likes?page=" + page);
+  } catch (error) {
+    logErr(error);
+    if (error instanceof SafeError) {
+      throw error;
+    } else {
+      throw new SafeError("Failed to fetch following posts");
+    }
+  }
+};
+
 export const post = async (post: {
   wrap_id: number;
   title: string;

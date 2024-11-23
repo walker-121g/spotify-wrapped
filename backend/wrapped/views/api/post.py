@@ -58,7 +58,7 @@ def get_posts(request):
         except User.DoesNotExist:
             return HttpResponse("User not found", status=404)
 
-        posts = Post.objects.order_by('-created_at').all()
+        posts = Post.objects.order_by('created_at').all()
         posts = posts[(page) * 10:(page + 1) * 10]
         posts_data = []
 
@@ -100,7 +100,49 @@ def get_following_posts(request):
         following = Follow.objects.filter(follower=user).all()
         following = [f.following for f in following]
 
-        posts = Post.objects.filter(user__in=following).order_by('-created_at').all()
+        posts = Post.objects.filter(user__in=following).order_by('created_at').all()
+        posts = posts[(page) * 10:(page + 1) * 10]
+        posts_data = []
+
+        for post in posts:
+            likes = Like.objects.filter(post=post).count()
+            comments = Comment.objects.filter(post=post).count()
+            author = post.user
+
+            posts_data.append({
+                'id': post.id,
+                'title': post.title,
+                'content': post.content,
+                'likes': likes,
+                'comments': comments,
+                'created_at': post.created_at,
+                'user': {
+                    'id': author.id,
+                    'name': author.name,
+                    'email': author.email
+                }
+            })
+
+        return JsonResponse(list(posts_data), safe=False, status=200)
+    else:
+        return HttpResponse("Invalid request method")
+
+
+@csrf_exempt
+def get_liked_posts(request):
+    if request.method == "GET":
+        email = request.user_email
+        page = int(request.GET.get('page', 1))
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return HttpResponse("User not found", status=404)
+
+        likes = Like.objects.filter(user=user).all()
+        likes = [l.post.id for l in likes]
+
+        posts = Post.objects.filter(id__in=likes).order_by('created_at').all()
         posts = posts[(page) * 10:(page + 1) * 10]
         posts_data = []
 

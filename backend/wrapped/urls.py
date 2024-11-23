@@ -8,7 +8,8 @@ from wrapped.views.api.album import check_if_saved, save_albums, delete_albums
 from wrapped.views.api.artists import get_artist, get_artists, get_artist_albums
 from wrapped.views.api.artists import get_related_artists, get_top_tracks
 from wrapped.views.api.follow import get_following, follow
-from wrapped.views.api.post import get_post, get_posts, get_following_posts, create_post, delete_post, like, comment
+from wrapped.views.api.post import get_post, get_posts, get_following_posts
+from wrapped.views.api.post import get_liked_posts, create_post, delete_post, like, comment
 from wrapped.views.frontend import index
 from wrapped.views.api.gemini import create_story
 from wrapped.views.api.track import get_track
@@ -179,6 +180,11 @@ urlpatterns = [
         "api/posts/following",
         get_following_posts,
         name="get_following_posts",
+    ),
+    path(
+        "api/posts/likes",
+        get_liked_posts,
+        name="get_liked_posts"
     ),
     path(
         "api/posts/create",
