@@ -1,8 +1,13 @@
 # CS 2340 Project #2 - Spotify Wrapped
 Django REST Backend + Vite React Frontend
 
+### Important Links
+- [Trello Board](https://trello.com/b/TSjXiJIy/2340-project-2)
+- [Project Website](https://2340wrapped.fly.dev)
+- [GitHub Repository](https://github.com/walker-121g/spotify-wrapped)
+
 ### Dependencies
-- [Python](https://www.python.org/downloads/) 
+- [Python](https://www.python.org/downloads/)
 - [NodeJS](https://nodejs.org/en/download/package-manager)
 - [pnpm](https://pnpm.io/installation)
 - [PostgreSQL](https://www.postgresql.org/download/)
