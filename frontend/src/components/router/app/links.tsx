@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-import { Home, User, Search, Mail, Music, Plus, Settings } from "lucide-react";
+import { Home, User, Search, Mail, Music, Plus, Settings, Gamepad2 } from "lucide-react";
 
 export const NavLink = ({
   expanded,
@@ -85,7 +85,7 @@ export const NavLinks = ({ expanded }: { expanded: boolean }) => {
         locations={["/app/games", "/app/games/"]}
         href="/app/games"
         name="Games"
-        icon={<Settings />}
+        icon={<Gamepad2 />}
       />
       <div className="flex flex-col gap-2 my-4">
         <span className={`${expanded ? "text-md" : "text-xs"} font-semibold`}>
