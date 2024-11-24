@@ -10,10 +10,12 @@ export type Wrap = {
   }[];
   tracks: {
     id: string;
+    track: string;
     listen_time: number;
   }[];
   artists: {
     id: string;
+    artist: string;
     listen_time: number;
   }[];
   created_at: string;

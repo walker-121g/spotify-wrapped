@@ -12,7 +12,6 @@ def create_story(request):
     if request.method == "GET":
         model = genai.GenerativeModel("gemini-1.5-flash")
         prompt = request.GET.get("prompt")
-        print("We are in gemini.py and prompt is " + prompt)
         resp = model.generate_content(prompt)
         print(resp.text)
         return JsonResponse(resp.text, safe=False, status=200)
