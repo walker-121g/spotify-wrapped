@@ -130,9 +130,11 @@ function NewWrapPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="short_term">Short Term</SelectItem>
-                        <SelectItem value="medium_term">Medium Term</SelectItem>
-                        <SelectItem value="long_term">Long Term</SelectItem>
+                        <SelectItem value="short_term">Last Month</SelectItem>
+                        <SelectItem value="medium_term">
+                          Last 6 Months
+                        </SelectItem>
+                        <SelectItem value="long_term">Last Year</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

@@ -43,11 +43,16 @@ export const Wrap = ({
         <div className="flex flex-col gap-2">
           <CardTitle>{wrap.name}</CardTitle>
           <CardDescription>
-            {wrap.period
-              .split("_")
-              .map((p) => `${p.charAt(0).toUpperCase()}${p.substring(1)}`)
-              .join(" ")}{" "}
-            - {new Date(wrap.created_at).toLocaleDateString()}
+            From{" "}
+            {new Date(
+              Date.parse(wrap.created_at) -
+                (wrap.period === "short_term"
+                  ? 1000 * 60 * 60 * 24 * 7 * 4
+                  : wrap.period === "medium_term"
+                    ? 1000 * 60 * 60 * 24 * 7 * 4 * 6
+                    : 1000 * 60 * 60 * 24 * 7 * 4 * 12),
+            ).toLocaleDateString()}{" "}
+            to {new Date(wrap.created_at).toLocaleDateString()}
           </CardDescription>
         </div>
         <DropdownMenu>
