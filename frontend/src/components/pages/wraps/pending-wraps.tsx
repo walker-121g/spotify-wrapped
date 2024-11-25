@@ -19,7 +19,9 @@ export const PendingWraps = () => {
   ) : data.length > 0 ? (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data
-        .filter((wrap) => wrap.users.some((user) => !user.accepted))
+        .filter(
+          (wrap) => wrap.users.filter((user) => !user.accepted).length > 0,
+        )
         .map((wrap) => (
           <Wrap key={wrap.id} wrap={wrap} refetch={refetch} />
         ))}

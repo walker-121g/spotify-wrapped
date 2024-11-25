@@ -1,5 +1,9 @@
 import { useRouter } from "@tanstack/react-router";
-import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
+import {
+  RefetchOptions,
+  QueryObserverResult,
+  useMutation,
+} from "@tanstack/react-query";
 
 import { Wrap as WrapType } from "@/services/types/wrap";
 
@@ -19,9 +23,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, Eye } from "lucide-react";
+import { Check, EllipsisVertical, Eye, X } from "lucide-react";
 import { DeleteWrap } from "./delete-wrap";
 import { PostWrap } from "./post-wrap";
+import { updateWrap } from "@/services/wrap.service";
+import { useEffect } from "react";
 
 export const Wrap = ({
   wrap,
@@ -35,7 +41,17 @@ export const Wrap = ({
   acceptable?: true;
 }) => {
   const router = useRouter();
-  console.log(acceptable);
+
+  const { isPending, isError, isSuccess, mutate } = useMutation({
+    mutationKey: ["update", "wrap", wrap.id],
+    mutationFn: async (accept: boolean) => await updateWrap(wrap.id, accept),
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
 
   return (
     <Card key={wrap.name}>
@@ -63,6 +79,27 @@ export const Wrap = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="z-50">
             <DropdownMenuLabel>Wrap Actions</DropdownMenuLabel>
+            {acceptable && !isPending && !isError && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    mutate(true);
+                  }}
+                >
+                  <Check />
+                  Accept
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    mutate(false);
+                  }}
+                >
+                  <X />
+                  Decline
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
