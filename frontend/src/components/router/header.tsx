@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Sheet,
   SheetClose,

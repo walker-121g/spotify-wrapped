@@ -4,7 +4,10 @@ import SafeError from "@/lib/safe-error";
 
 export async function getGeminiStory(prompt: string) {
   try {
-    const resp = await http("GET", "/gemini/story/create?prompt=" + prompt, {
+    const resp = await http("POST", "/gemini/story/create", {
+      body: JSON.stringify({
+        prompt,
+      }),
       textResponse: true,
     });
     return resp;

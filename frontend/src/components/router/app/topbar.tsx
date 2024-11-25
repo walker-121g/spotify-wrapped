@@ -33,7 +33,7 @@ export const Topbar = () => {
   return (
     <div className="w-full p-8 flex flex-row justify-between items-center border-b">
       <Sheet>
-        <SheetTrigger asChild className="sm:invisible">
+        <SheetTrigger asChild className="md:invisible">
           <Button variant="outline" size="icon">
             <Menu />
           </Button>

@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import ErrorImage from "@/assets/undraw_error.svg";
 import { WrapUsers } from "@/components/pages/wraps/details/users";
 import { WrapSummary } from "@/components/pages/wraps/details/summary";
+import { WrapSlides } from "@/components/pages/wraps/details/slides";
 
 export const Route = createFileRoute("/app/wraps/$id")({
   component: WrapDetail,
@@ -37,6 +38,7 @@ function WrapDetail() {
   ) : (
     <div className="w-full flex flex-col gap-8">
       <WrapUsers wrap={data} />
+      <WrapSlides wrap={data} />
       <WrapSummary wrap={data} />
     </div>
   );

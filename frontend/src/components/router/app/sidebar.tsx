@@ -10,7 +10,7 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={`relative ${expanded ? "w-[30rem] p-8" : "w-16 p-3"} h-screen hidden sm:flex flex-col justify-between border-r transition-[width] duration-200`}
+      className={`relative ${expanded ? "w-[30rem] p-8" : "w-16 p-3"} h-screen hidden md:flex flex-col justify-between border-r transition-[width] duration-200`}
     >
       <div className="w-full flex flex-col gap-8">
         <div className={expanded ? "w-full flex flex-col" : "hidden"}>

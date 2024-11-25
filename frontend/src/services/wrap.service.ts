@@ -26,13 +26,15 @@ export const getWrapInfo = async (wrap: Wrap): Promise<WrapPreview> => {
       artists: [],
     };
 
-    for (const track of wrap.tracks.splice(0, 10)) {
+    for (let i = 0; i < Math.min(wrap.tracks.length, 30); i++) {
+      const track = wrap.tracks[i];
       result.tracks.push(
         (await getTrack(track.track)) as WrapPreview["tracks"][0],
       );
     }
 
-    for (const artist of wrap.artists.splice(0, 10)) {
+    for (let i = 0; i < Math.min(wrap.artists.length, 5); i++) {
+      const artist = wrap.artists[i];
       result.artists.push(
         (await getArtist(artist.artist)) as WrapPreview["artists"][0],
       );
