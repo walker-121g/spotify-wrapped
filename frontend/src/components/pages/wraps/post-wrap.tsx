@@ -131,6 +131,7 @@ export const PostWrap = ({ wrap }: { wrap: Wrap }) => {
                   form.reset();
                 }}
                 variant="ghost"
+                type="button"
               >
                 Cancel
               </Button>
