@@ -15,6 +15,7 @@ import { Wrap } from "@/services/types/wrap";
 
 import ErrorImage from "@/assets/undraw_friends.svg";
 import { WelcomeSlide } from "./slides/welcome";
+import { SharedMostPlayedSlide } from "./slides/shared-most-played";
 import { MostPlayedSlide } from "./slides/most-played";
 import { GenreSlide } from "./slides/genres";
 import { TopArtistSlide } from "./slides/top-artist";
@@ -62,6 +63,12 @@ export const WrapSlides = ({ wrap }: { wrap: Wrap }) => {
           <CarouselItem>
             <WelcomeSlide wrap={wrap} />
           </CarouselItem>
+          {/* Conditionally render shared wrap slide */}
+          {wrap.users.length > 1 && (
+            <CarouselItem>
+              <SharedMostPlayedSlide wrap={wrap} info={data} />
+            </CarouselItem>
+          )}
           <CarouselItem>
             <MostPlayedSlide wrap={wrap} info={data} />
           </CarouselItem>
