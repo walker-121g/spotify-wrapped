@@ -26,14 +26,23 @@ export const WrapSummary = ({ wrap }: { wrap: Wrap }) => {
     data: summary,
   } = useQuery({
     queryKey: ["wrap", "summary", wrap.id],
-    queryFn: async () =>
-      await getGeminiStory(
-        `
+    queryFn: async () => {
+      const userCount = wrap.users.length;
+      const prompt =
+        userCount > 1
+          ? `
         Respond to the following prompt where '***' represents a line break and '_' surrounds text that should be bold. Add no other formatting.
-        Given the following Spotify Wrap JSON data, curate an AI summary that explains what the listeners music tastes mean. Make a prediction about astrology signs, listening mood, and other artists the listener might like.
+        Given the following Spotify Wrap JSON data, analyze and compare the music tastes of the users in this wrap. Highlight similarities, contrasts, and any shared trends. Make a prediction about how their tastes might influence group activities like music sharing or event planning. Suggest artists or genres they might all enjoy. 
         WRAP: ${JSON.stringify(wrap)},
-        SPOTIFY_INFO: ${JSON.stringify(data!)}`,
-      ),
+        SPOTIFY_INFO: ${JSON.stringify(data!)}` // comparing multiple users
+          : `
+        Respond to the following prompt where '***' represents a line break and '_' surrounds text that should be bold. Add no other formatting.
+        Given the following Spotify Wrap JSON data, curate an AI summary that explains what the listener's music tastes mean. Make a prediction about astrology signs, listening mood, and other artists the listener might like.
+        WRAP: ${JSON.stringify(wrap)},
+        SPOTIFY_INFO: ${JSON.stringify(data!)}`; // just analyzing 1 user
+
+      return await getGeminiStory(prompt);
+    },
     enabled: !isLoading && !isError && data !== undefined,
   });
 
