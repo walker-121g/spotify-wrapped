@@ -24,6 +24,7 @@ import { Route as AppProfileImport } from './routes/app/profile'
 import { Route as AppMessagesImport } from './routes/app/messages'
 import { Route as AppWrapsIndexImport } from './routes/app/wraps/index'
 import { Route as AppWrapsNewImport } from './routes/app/wraps/new'
+import { Route as AppWrapsIdImport } from './routes/app/wraps/$id'
 import { Route as AppProfilesIdImport } from './routes/app/profiles/$id'
 import { Route as AppPostsIdImport } from './routes/app/posts/$id'
 
@@ -104,6 +105,12 @@ const AppWrapsIndexRoute = AppWrapsIndexImport.update({
 const AppWrapsNewRoute = AppWrapsNewImport.update({
   id: '/wraps/new',
   path: '/wraps/new',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppWrapsIdRoute = AppWrapsIdImport.update({
+  id: '/wraps/$id',
+  path: '/wraps/$id',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -214,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfilesIdImport
       parentRoute: typeof AppImport
     }
+    '/app/wraps/$id': {
+      id: '/app/wraps/$id'
+      path: '/wraps/$id'
+      fullPath: '/app/wraps/$id'
+      preLoaderRoute: typeof AppWrapsIdImport
+      parentRoute: typeof AppImport
+    }
     '/app/wraps/new': {
       id: '/app/wraps/new'
       path: '/wraps/new'
@@ -241,6 +255,7 @@ interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppPostsIdRoute: typeof AppPostsIdRoute
   AppProfilesIdRoute: typeof AppProfilesIdRoute
+  AppWrapsIdRoute: typeof AppWrapsIdRoute
   AppWrapsNewRoute: typeof AppWrapsNewRoute
   AppWrapsIndexRoute: typeof AppWrapsIndexRoute
 }
@@ -253,6 +268,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppPostsIdRoute: AppPostsIdRoute,
   AppProfilesIdRoute: AppProfilesIdRoute,
+  AppWrapsIdRoute: AppWrapsIdRoute,
   AppWrapsNewRoute: AppWrapsNewRoute,
   AppWrapsIndexRoute: AppWrapsIndexRoute,
 }
@@ -273,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps': typeof AppWrapsIndexRoute
 }
@@ -290,6 +307,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps': typeof AppWrapsIndexRoute
 }
@@ -309,6 +327,7 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/wraps/': typeof AppWrapsIndexRoute
 }
@@ -329,6 +348,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/wraps'
   fileRoutesByTo: FileRoutesByTo
@@ -345,6 +365,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/wraps'
   id:
@@ -362,6 +383,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/wraps/'
   fileRoutesById: FileRoutesById
@@ -421,6 +443,7 @@ export const routeTree = rootRoute
         "/app/",
         "/app/posts/$id",
         "/app/profiles/$id",
+        "/app/wraps/$id",
         "/app/wraps/new",
         "/app/wraps/"
       ]
@@ -460,6 +483,10 @@ export const routeTree = rootRoute
     },
     "/app/profiles/$id": {
       "filePath": "app/profiles/$id.tsx",
+      "parent": "/app"
+    },
+    "/app/wraps/$id": {
+      "filePath": "app/wraps/$id.tsx",
       "parent": "/app"
     },
     "/app/wraps/new": {

@@ -269,7 +269,7 @@ function NewWrapPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Top Tracks</span>
+                <span className="text-sm font-semibold">Top Artists</span>
                 <div className="w-full grid grid-cols-2 gap-2">
                   {data?.artists.slice(0, 10).map((artist) => (
                     <Card key={artist.id}>

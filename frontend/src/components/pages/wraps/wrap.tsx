@@ -26,7 +26,7 @@ import { PostWrap } from "./post-wrap";
 export const Wrap = ({
   wrap,
   refetch,
-  acceptable
+  acceptable,
 }: {
   wrap: WrapType;
   refetch: (
@@ -62,7 +62,7 @@ export const Wrap = ({
             <DropdownMenuItem
               onClick={() => {
                 router.navigate({
-                  to: `/app/wrap/${wrap.id}`,
+                  to: `/app/wraps/${wrap.id}`,
                 });
               }}
             >
@@ -77,7 +77,7 @@ export const Wrap = ({
       </CardHeader>
       <CardContent>
         <span className="text-sm">
-          {wrap.artists.length} album{wrap.artists.length !== 1 && "s"} /{" "}
+          {wrap.artists.length} artist{wrap.artists.length !== 1 && "s"} /{" "}
           {wrap.tracks.length} track{wrap.tracks.length !== 1 && "s"} /{" "}
           {wrap.users.length} user{wrap.users.length !== 1 && "s"}
         </span>
