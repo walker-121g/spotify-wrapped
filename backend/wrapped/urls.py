@@ -1,3 +1,4 @@
+from requests import get
 from django.urls import path, re_path
 from wrapped.views.api.auth import begin_auth, handle_auth_callback, get_tokens, get_user, logout, delete_account
 from wrapped.views.api.wraps import get_wrap, get_wraps, get_shared_wraps, create_wrap
@@ -11,7 +12,7 @@ from wrapped.views.api.follow import get_following, follow
 from wrapped.views.api.post import get_post, get_posts, get_following_posts
 from wrapped.views.api.post import get_liked_posts, create_post, delete_post, like, comment
 from wrapped.views.api.post import get_posts, get_following_posts, create_post, delete_post, like, comment
-from wrapped.views.api.games import get_user_quiz
+from wrapped.views.api.games import get_clip_quiz 
 from wrapped.views.frontend import index
 from wrapped.views.api.gemini import create_story
 from wrapped.views.api.track import get_track
@@ -214,9 +215,9 @@ urlpatterns = [
         name="create_story",
     ),
     path(
-        "api/games/quiz",
-        get_user_quiz,
-        name="get_user_quiz"
+        "api/games/clipquiz",
+        get_clip_quiz,
+        name="get_clip_quiz"
     ),
     re_path(r'^(?!static/|api/).*$', index, name="index"),
 ]
