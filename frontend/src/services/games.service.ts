@@ -1,12 +1,13 @@
 import { logErr } from "@/lib/utils";
 import { http } from "./http.service";
 import SafeError from "@/lib/safe-error";
+import { ClipQuiz } from "./types/games";
 
-export async function getUserQuiz() {
+export async function getClipQuiz(): Promise<ClipQuiz> {
     try {
-        const resp = await http(
+        const resp: ClipQuiz = await http(
             "GET",
-            `/games/quiz`,
+            `/games/clipquiz`,
         ) 
 
         return resp;

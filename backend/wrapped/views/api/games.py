@@ -1,10 +1,29 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
+import random
+
+def generate_options(correct_answer, test_bank):
+    if len(test_bank) < 4:
+        return ["cannot create options"]
+
+    options = [correct_answer] 
+
+    while len(options) < 4:
+        choice = random.choice(test_bank)
+        if choice not in options:
+            coin_flip = random.randint(0, 1) #randomizes options
+            if coin_flip == 0:
+                options.append(choice)
+            else:
+                options.insert(0, choice)
+
+    return options
+
 
 
 @csrf_exempt
-def get_user_quiz(request):
+def get_clip_quiz(request):
     if request.method == "GET":
         auth_header = request.headers.get("Authorization")
 
@@ -28,16 +47,30 @@ def get_user_quiz(request):
             return JsonResponse({"error": "You do not have enough saved tracks to create a quiz. The minimum required is 5."})
 
         response = {}
+        questions = [] 
+        test_bank = []
 
-        song_clip_urls = []
-        correct_answers = []
         for item in data["items"]:
             track = item["track"]
-            song_clip_urls.append(track["preview_url"]) 
-            correct_answers.append(track["name"])
+            question = {}
 
-        response["song_clip_urls"] = song_clip_urls
-        response["correct_answers"] = correct_answers 
+            
+
+            question["name"] = track["name"]
+            question["clip_url"] = track["preview_url"] 
+            question["options"] = generate_options(question["name"], data["items"])
+
+            if question["clip_url"] is not None:
+                questions.append(question)
+                test_bank.append(question["name"])
+
+        for question in questions:
+            options = generate_options(question["name"], test_bank)
+            question["options"] = options
+                
+
+
+        response["questions"] = questions
 
         return JsonResponse(response, status=200)
     else:

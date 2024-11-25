@@ -1,7 +1,5 @@
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { getUserQuiz } from "@/services/games.service"
-import { useEffect } from "react"
 
 type Game = {
     name: string,
@@ -10,10 +8,6 @@ type Game = {
 }
 
 export const Display = () => {
-    useEffect(() => {
-        const games = getUserQuiz()
-        console.log(games)
-    })
 
     const games: Game[] = [
         {
