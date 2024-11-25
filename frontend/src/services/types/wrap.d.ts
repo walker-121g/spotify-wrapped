@@ -2,6 +2,8 @@ export type Wrap = {
   id: number;
   name: string;
   period: "short_term" | "medium_term" | "long_term";
+  track_count: number;
+  artist_count: number;
   users: {
     email: string;
     name: string;
