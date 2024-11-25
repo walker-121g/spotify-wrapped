@@ -42,7 +42,7 @@ export const SharedWraps = () => {
                 ),
               )
               .map((wrap) => (
-                <Wrap key={wrap.id} wrap={wrap} refetch={refetch} />
+                <Wrap key={wrap.id} wrap={wrap} refetch={refetch} acceptable />
               ))}
           </div>
         </div>

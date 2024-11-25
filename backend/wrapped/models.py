@@ -13,6 +13,8 @@ class User(models.Model):
 
 class Wrap(models.Model):
     name = models.CharField(max_length=255)
+    track_count = models.IntegerField(default=0)
+    artist_count = models.IntegerField(default=0)
     time_period = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)

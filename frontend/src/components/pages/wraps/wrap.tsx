@@ -119,8 +119,8 @@ export const Wrap = ({
       </CardHeader>
       <CardContent>
         <span className="text-sm">
-          {wrap.artists.length} artist{wrap.artists.length !== 1 && "s"} /{" "}
-          {wrap.tracks.length} track{wrap.tracks.length !== 1 && "s"} /{" "}
+          {wrap.artist_count} artist{wrap.artist_count !== 1 && "s"} /{" "}
+          {wrap.track_count} track{wrap.track_count !== 1 && "s"} /{" "}
           {wrap.users.length} user{wrap.users.length !== 1 && "s"}
         </span>
       </CardContent>

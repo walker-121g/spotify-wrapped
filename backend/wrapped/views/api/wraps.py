@@ -27,6 +27,8 @@ def get_wrap(request):
             "id": wrap[0].id,
             "name": wrap[0].name,
             "period": wrap[0].time_period,
+            "track_count": wrap[0].track_count,
+            "artist_count": wrap[0].artist_count,
             "users": [
                 {
                     "email": wrap_user.user.email,
@@ -92,6 +94,8 @@ def get_wraps(request):
                     "id": wrap.id,
                     "name": wrap.name,
                     "period": wrap.time_period,
+                    "track_count": wrap.track_count,
+                    "artist_count": wrap.artist_count,
                     "users": [
                         {
                             "email": wrap_user.user.email,
@@ -148,6 +152,8 @@ def get_shared_wraps(request):
                     "id": wrap.id,
                     "name": wrap.name,
                     "period": wrap.time_period,
+                    "track_count": wrap.track_count,
+                    "artist_count": wrap.artist_count,
                     "users": [
                         {
                             "email": wrap_user.user.email,
@@ -217,13 +223,18 @@ def create_wrap(request):
                 top_tracks = get_top_tracks(data["period"], auth_header)
                 top_artists = get_top_artists(data["period"], auth_header)
 
-                for artist in top_artists:
+                # update wrap with track and artist count
+                wrap.track_count = len(top_tracks)
+                wrap.artist_count = len(top_artists)
+                wrap.save()
+
+                for artist in top_artists[:20]:
                     wrap_artist = WrapArtist(
                         artist=artist["id"], user=user, wrap=wrap, listen_time=0
                     )
                     wrap_artist.save()
 
-                for track in top_tracks:
+                for track in top_tracks[:100]:
                     wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0)
                     wrap_track.save()
         except Exception as e:
@@ -286,15 +297,18 @@ def accept_wrap(request):
         except WrapUser.DoesNotExist:
             return JsonResponse({"error": "User is not part of the wrap"}, status=400)
 
-        wrap = Wrap.objects.get(id=data["wrap_id"])
-        top_tracks = get_top_tracks(wrap["time_period"], auth_header)
-        top_artists = get_top_artists(wrap["time_period"], auth_header)
+        top_tracks = get_top_tracks(wrap.time_period, auth_header)
+        top_artists = get_top_artists(wrap.time_period, auth_header)
 
-        for artist in top_artists:
+        wrap.track_count += len(top_tracks)
+        wrap.artist_count += len(top_artists)
+        wrap.save()
+
+        for artist in top_artists[:20]:
             wrap_artist = WrapArtist(artist=artist["id"], user=user, wrap=wrap, listen_time=0)
             wrap_artist.save()
 
-        for track in top_tracks:
+        for track in top_tracks[:100]:
             wrap_track = WrapTrack(artist=track["id"], user=user, wrap=wrap, listen_time=0)
             wrap_track.save()
 
