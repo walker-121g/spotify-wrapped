@@ -13,7 +13,10 @@ def get_wrap(request):
 
         wrap = (
             Wrap.objects.filter(id=id)
-            .prefetch_related("wrapuser_set__user", "wrapartist_set", "wraptrack_set")
+            .prefetch_related(
+                "wrapuser_set__user",
+                "wrapartist_set",
+                "wraptrack_set")
             .distinct()
         )
 
@@ -34,11 +37,29 @@ def get_wrap(request):
                 for wrap_user in wrap[0].wrapuser_set.all()
             ],
             "artists": [
-                {"id": artist.id, "artist": artist.artist, "listen_time": artist.listen_time}
+                {
+                    "id": artist.id,
+                    "artist": artist.artist,
+                    "listen_time": artist.listen_time,
+                    "user": {
+                        "id": artist.user.id,
+                        "email": artist.user.email,
+                        "name": artist.user.name,
+                    }
+                }
                 for artist in wrap[0].wrapartist_set.all()
             ],
             "tracks": [
-                {"id": track.id, "track": track.track, "listen_time": track.listen_time}
+                {
+                    "id": track.id,
+                    "track": track.track,
+                    "listen_time": track.listen_time,
+                    "user": {
+                        "id": track.user.id,
+                        "email": track.user.email,
+                        "name": track.user.name,
+                    }
+                }
                 for track in wrap[0].wraptrack_set.all()
             ],
             "created_at": wrap[0].created_at,
@@ -57,7 +78,10 @@ def get_wraps(request):
         user = User.objects.get(email=email)
         wraps = (
             Wrap.objects.filter(wrapuser__user=user, wrapuser__owner=True)
-            .prefetch_related("wrapuser_set__user", "wrapartist_set", "wraptrack_set")
+            .prefetch_related(
+                "wrapuser_set__user",
+                "wrapartist_set",
+                "wraptrack_set")
             .distinct()
         )
 
@@ -78,11 +102,19 @@ def get_wraps(request):
                         for wrap_user in wrap.wrapuser_set.all()
                     ],
                     "artists": [
-                        {"id": artist.id, "artist": artist.artist, "listen_time": artist.listen_time}
+                        {
+                            "id": artist.id,
+                            "artist": artist.artist,
+                            "listen_time": artist.listen_time,
+                        }
                         for artist in wrap.wrapartist_set.all()
                     ],
                     "tracks": [
-                        {"id": track.id, "track": track.track, "listen_time": track.listen_time}
+                        {
+                            "id": track.id,
+                            "track": track.track,
+                            "listen_time": track.listen_time,
+                        }
                         for track in wrap.wraptrack_set.all()
                     ],
                     "created_at": wrap.created_at,
@@ -102,7 +134,10 @@ def get_shared_wraps(request):
         user = User.objects.get(email=email)
         wraps = (
             Wrap.objects.filter(wrapuser__user=user, wrapuser__owner=False)
-            .prefetch_related("wrapuser_set__user", "wrapartist_set", "wraptrack_set")
+            .prefetch_related(
+                "wrapuser_set__user",
+                "wrapartist_set",
+                "wraptrack_set")
             .distinct()
         )
 
@@ -123,11 +158,19 @@ def get_shared_wraps(request):
                         for wrap_user in wrap.wrapuser_set.all()
                     ],
                     "artists": [
-                        {"id": artist.id, "artist": artist.artist, "listen_time": artist.listen_time}
+                        {
+                            "id": artist.id,
+                            "artist": artist.artist,
+                            "listen_time": artist.listen_time,
+                        }
                         for artist in wrap.wrapartist_set.all()
                     ],
                     "tracks": [
-                        {"id": track.id, "track": track.track, "listen_time": track.listen_time}
+                        {
+                            "id": track.id,
+                            "track": track.track,
+                            "listen_time": track.listen_time,
+                        }
                         for track in wrap.wraptrack_set.all()
                     ],
                     "created_at": wrap.created_at,
@@ -176,12 +219,12 @@ def create_wrap(request):
 
                 for artist in top_artists:
                     wrap_artist = WrapArtist(
-                        artist=artist["id"], wrap=wrap, listen_time=0
+                        artist=artist["id"], user=user, wrap=wrap, listen_time=0
                     )
                     wrap_artist.save()
 
                 for track in top_tracks:
-                    wrap_track = WrapTrack(track=track["id"], wrap=wrap, listen_time=0)
+                    wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0)
                     wrap_track.save()
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
@@ -248,11 +291,11 @@ def accept_wrap(request):
         top_artists = get_top_artists(wrap["time_period"], auth_header)
 
         for artist in top_artists:
-            wrap_artist = WrapArtist(artist=artist["id"], wrap=wrap, listen_time=0)
+            wrap_artist = WrapArtist(artist=artist["id"], user=user, wrap=wrap, listen_time=0)
             wrap_artist.save()
 
         for track in top_tracks:
-            wrap_track = WrapTrack(artist=track["id"], listen_time=0)
+            wrap_track = WrapTrack(artist=track["id"], user=user, wrap=wrap, listen_time=0)
             wrap_track.save()
 
         return JsonResponse({"success": True}, status=200)

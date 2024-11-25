@@ -12,11 +12,21 @@ export type Wrap = {
     id: string;
     track: string;
     listen_time: number;
+    user: {
+      id: number;
+      email: string;
+      name: string;
+    };
   }[];
   artists: {
     id: string;
     artist: string;
     listen_time: number;
+    user: {
+      id: number;
+      email: string;
+      name: string;
+    };
   }[];
   created_at: string;
 };

@@ -12,6 +12,8 @@ export const MyWraps = () => {
     queryFn: async () => await getWraps(),
   });
 
+  console.log(data);
+
   return isLoading || !data ? (
     <div className="w-full flex flex-row justify-center my-16">
       <Loader2 className="animate-spin" />
@@ -19,7 +21,9 @@ export const MyWraps = () => {
   ) : data.length > 0 ? (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data
-        .filter((wrap) => !wrap.users.some((user) => !user.accepted))
+        .filter(
+          (wrap) => wrap.users.filter((user) => !user.accepted).length <= 0,
+        )
         .map((wrap) => (
           <Wrap key={wrap.id} wrap={wrap} refetch={refetch} />
         ))}
