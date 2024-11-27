@@ -130,9 +130,11 @@ function NewWrapPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="short_term">Short Term</SelectItem>
-                        <SelectItem value="medium_term">Medium Term</SelectItem>
-                        <SelectItem value="long_term">Long Term</SelectItem>
+                        <SelectItem value="short_term">Last Month</SelectItem>
+                        <SelectItem value="medium_term">
+                          Last 6 Months
+                        </SelectItem>
+                        <SelectItem value="long_term">Last Year</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -269,7 +271,7 @@ function NewWrapPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <span className="text-sm font-semibold">Top Tracks</span>
+                <span className="text-sm font-semibold">Top Artists</span>
                 <div className="w-full grid grid-cols-2 gap-2">
                   {data?.artists.slice(0, 10).map((artist) => (
                     <Card key={artist.id}>

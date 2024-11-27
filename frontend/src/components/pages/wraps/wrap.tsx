@@ -1,5 +1,9 @@
 import { useRouter } from "@tanstack/react-router";
-import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
+import {
+  RefetchOptions,
+  QueryObserverResult,
+  useMutation,
+} from "@tanstack/react-query";
 
 import { Wrap as WrapType } from "@/services/types/wrap";
 
@@ -19,14 +23,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, Eye } from "lucide-react";
+import { Check, EllipsisVertical, Eye, X } from "lucide-react";
 import { DeleteWrap } from "./delete-wrap";
 import { PostWrap } from "./post-wrap";
+import { updateWrap } from "@/services/wrap.service";
+import { useEffect } from "react";
 
 export const Wrap = ({
   wrap,
   refetch,
-  acceptable
+  acceptable,
 }: {
   wrap: WrapType;
   refetch: (
@@ -35,7 +41,17 @@ export const Wrap = ({
   acceptable?: true;
 }) => {
   const router = useRouter();
-  console.log(acceptable);
+
+  const { isPending, isError, isSuccess, mutate } = useMutation({
+    mutationKey: ["update", "wrap", wrap.id],
+    mutationFn: async (accept: boolean) => await updateWrap(wrap.id, accept),
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
 
   return (
     <Card key={wrap.name}>
@@ -43,11 +59,16 @@ export const Wrap = ({
         <div className="flex flex-col gap-2">
           <CardTitle>{wrap.name}</CardTitle>
           <CardDescription>
-            {wrap.period
-              .split("_")
-              .map((p) => `${p.charAt(0).toUpperCase()}${p.substring(1)}`)
-              .join(" ")}{" "}
-            - {new Date(wrap.created_at).toLocaleDateString()}
+            From{" "}
+            {new Date(
+              Date.parse(wrap.created_at) -
+                (wrap.period === "short_term"
+                  ? 1000 * 60 * 60 * 24 * 7 * 4
+                  : wrap.period === "medium_term"
+                    ? 1000 * 60 * 60 * 24 * 7 * 4 * 6
+                    : 1000 * 60 * 60 * 24 * 7 * 4 * 12),
+            ).toLocaleDateString()}{" "}
+            to {new Date(wrap.created_at).toLocaleDateString()}
           </CardDescription>
         </div>
         <DropdownMenu>
@@ -58,11 +79,32 @@ export const Wrap = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="z-50">
             <DropdownMenuLabel>Wrap Actions</DropdownMenuLabel>
+            {acceptable && !isPending && !isError && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    mutate(true);
+                  }}
+                >
+                  <Check />
+                  Accept
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    mutate(false);
+                  }}
+                >
+                  <X />
+                  Decline
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
                 router.navigate({
-                  to: `/app/wrap/${wrap.id}`,
+                  to: `/app/wraps/${wrap.id}`,
                 });
               }}
             >
@@ -77,8 +119,8 @@ export const Wrap = ({
       </CardHeader>
       <CardContent>
         <span className="text-sm">
-          {wrap.artists.length} album{wrap.artists.length !== 1 && "s"} /{" "}
-          {wrap.tracks.length} track{wrap.tracks.length !== 1 && "s"} /{" "}
+          {wrap.artist_count} artist{wrap.artist_count !== 1 && "s"} /{" "}
+          {wrap.track_count} track{wrap.track_count !== 1 && "s"} /{" "}
           {wrap.users.length} user{wrap.users.length !== 1 && "s"}
         </span>
       </CardContent>

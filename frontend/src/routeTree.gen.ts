@@ -25,6 +25,7 @@ import { Route as AppMessagesImport } from './routes/app/messages'
 import { Route as AppWrapsIndexImport } from './routes/app/wraps/index'
 import { Route as AppGamesIndexImport } from './routes/app/games/index'
 import { Route as AppWrapsNewImport } from './routes/app/wraps/new'
+import { Route as AppWrapsIdImport } from './routes/app/wraps/$id'
 import { Route as AppProfilesIdImport } from './routes/app/profiles/$id'
 import { Route as AppPostsIdImport } from './routes/app/posts/$id'
 import { Route as AppGamesClipquizImport } from './routes/app/games/clipquiz'
@@ -112,6 +113,12 @@ const AppGamesIndexRoute = AppGamesIndexImport.update({
 const AppWrapsNewRoute = AppWrapsNewImport.update({
   id: '/wraps/new',
   path: '/wraps/new',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppWrapsIdRoute = AppWrapsIdImport.update({
+  id: '/wraps/$id',
+  path: '/wraps/$id',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -235,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfilesIdImport
       parentRoute: typeof AppImport
     }
+    '/app/wraps/$id': {
+      id: '/app/wraps/$id'
+      path: '/wraps/$id'
+      fullPath: '/app/wraps/$id'
+      preLoaderRoute: typeof AppWrapsIdImport
+      parentRoute: typeof AppImport
+    }
     '/app/wraps/new': {
       id: '/app/wraps/new'
       path: '/wraps/new'
@@ -270,6 +284,7 @@ interface AppRouteChildren {
   AppGamesClipquizRoute: typeof AppGamesClipquizRoute
   AppPostsIdRoute: typeof AppPostsIdRoute
   AppProfilesIdRoute: typeof AppProfilesIdRoute
+  AppWrapsIdRoute: typeof AppWrapsIdRoute
   AppWrapsNewRoute: typeof AppWrapsNewRoute
   AppGamesIndexRoute: typeof AppGamesIndexRoute
   AppWrapsIndexRoute: typeof AppWrapsIndexRoute
@@ -284,6 +299,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppGamesClipquizRoute: AppGamesClipquizRoute,
   AppPostsIdRoute: AppPostsIdRoute,
   AppProfilesIdRoute: AppProfilesIdRoute,
+  AppWrapsIdRoute: AppWrapsIdRoute,
   AppWrapsNewRoute: AppWrapsNewRoute,
   AppGamesIndexRoute: AppGamesIndexRoute,
   AppWrapsIndexRoute: AppWrapsIndexRoute,
@@ -306,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/app/games/clipquiz': typeof AppGamesClipquizRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/games': typeof AppGamesIndexRoute
   '/app/wraps': typeof AppWrapsIndexRoute
@@ -325,6 +342,7 @@ export interface FileRoutesByTo {
   '/app/games/clipquiz': typeof AppGamesClipquizRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/games': typeof AppGamesIndexRoute
   '/app/wraps': typeof AppWrapsIndexRoute
@@ -346,6 +364,7 @@ export interface FileRoutesById {
   '/app/games/clipquiz': typeof AppGamesClipquizRoute
   '/app/posts/$id': typeof AppPostsIdRoute
   '/app/profiles/$id': typeof AppProfilesIdRoute
+  '/app/wraps/$id': typeof AppWrapsIdRoute
   '/app/wraps/new': typeof AppWrapsNewRoute
   '/app/games/': typeof AppGamesIndexRoute
   '/app/wraps/': typeof AppWrapsIndexRoute
@@ -368,6 +387,7 @@ export interface FileRouteTypes {
     | '/app/games/clipquiz'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/games'
     | '/app/wraps'
@@ -386,6 +406,7 @@ export interface FileRouteTypes {
     | '/app/games/clipquiz'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/games'
     | '/app/wraps'
@@ -405,6 +426,7 @@ export interface FileRouteTypes {
     | '/app/games/clipquiz'
     | '/app/posts/$id'
     | '/app/profiles/$id'
+    | '/app/wraps/$id'
     | '/app/wraps/new'
     | '/app/games/'
     | '/app/wraps/'
@@ -466,6 +488,7 @@ export const routeTree = rootRoute
         "/app/games/clipquiz",
         "/app/posts/$id",
         "/app/profiles/$id",
+        "/app/wraps/$id",
         "/app/wraps/new",
         "/app/games/",
         "/app/wraps/"
@@ -510,6 +533,10 @@ export const routeTree = rootRoute
     },
     "/app/profiles/$id": {
       "filePath": "app/profiles/$id.tsx",
+      "parent": "/app"
+    },
+    "/app/wraps/$id": {
+      "filePath": "app/wraps/$id.tsx",
       "parent": "/app"
     },
     "/app/wraps/new": {

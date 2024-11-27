@@ -26,12 +26,18 @@ export const getWrapInfo = async (wrap: Wrap): Promise<WrapPreview> => {
       artists: [],
     };
 
-    for (const track of wrap.tracks.splice(0, 10)) {
-      result.tracks.push(await getTrack(track.id) as WrapPreview["tracks"][0]);
+    for (let i = 0; i < Math.min(wrap.tracks.length, 30); i++) {
+      const track = wrap.tracks[i];
+      result.tracks.push(
+        (await getTrack(track.track)) as WrapPreview["tracks"][0],
+      );
     }
 
-    for (const artist of wrap.artists.splice(0, 10)) {
-      result.artists.push(await getArtist(artist.id) as WrapPreview["artists"][0]);
+    for (let i = 0; i < Math.min(wrap.artists.length, 5); i++) {
+      const artist = wrap.artists[i];
+      result.artists.push(
+        (await getArtist(artist.artist)) as WrapPreview["artists"][0],
+      );
     }
 
     return result;
@@ -96,7 +102,7 @@ export const createWrap = async (wrap: {
 
 export const updateWrap = async (
   id: number,
-  accept: boolean
+  accept: boolean,
 ): Promise<boolean> => {
   try {
     const result = await http<boolean>(
@@ -104,7 +110,7 @@ export const updateWrap = async (
       accept ? "/wraps/accept" : "/wraps/decline",
       {
         body: JSON.stringify({ wrap_id: id }),
-      }
+      },
     );
 
     return result;
@@ -114,7 +120,7 @@ export const updateWrap = async (
       throw error;
     } else {
       throw new SafeError(
-        "Failed to " + accept ? "accept" : "decline" + " wrap"
+        "Failed to " + accept ? "accept" : "decline" + " wrap",
       );
     }
   }
@@ -138,12 +144,12 @@ export const deleteWrap = async (id: number): Promise<boolean> => {
 };
 
 export const previewWrap = async (
-  period: Wrap["period"]
+  period: Wrap["period"],
 ): Promise<WrapPreview> => {
   try {
     const result = await http<WrapPreview>(
       "GET",
-      "/wraps/preview?period=" + period
+      "/wraps/preview?period=" + period,
     );
 
     return result;

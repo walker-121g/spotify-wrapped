@@ -13,6 +13,8 @@ class User(models.Model):
 
 class Wrap(models.Model):
     name = models.CharField(max_length=255)
+    track_count = models.IntegerField(default=0)
+    artist_count = models.IntegerField(default=0)
     time_period = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -35,6 +37,7 @@ class WrapUser(models.Model):
 
 class WrapArtist(models.Model):
     artist = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
     listen_time = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,6 +49,7 @@ class WrapArtist(models.Model):
 
 class WrapTrack(models.Model):
     track = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
     listen_time = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)

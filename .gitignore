@@ -122,3 +122,7 @@ db.sqlite3
 venv
 
 coverage/
+
+### Git ###
+frontend/pnpm-lock.yaml
+frontend/src/routeTree.gen.ts
