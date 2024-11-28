@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, parse_cookie
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import random
@@ -19,6 +19,28 @@ def generate_options(correct_answer, test_bank):
                 options.insert(0, choice)
 
     return options
+
+def select_rand_no_duplicates(items, picked_items):
+    iteration_tracker = 0
+
+    while True:
+        rand_item = random.choice(items)
+        track = rand_item["track"]
+        name = track["name"] 
+        iteration_tracker += 1
+
+        if name not in picked_items:
+            picked_items.add(name)
+            return track 
+
+        if iteration_tracker == 100: #default to O(n) search if searching for too long 
+            for item in items:
+                track = item["track"]
+                name = track["name"] 
+                if name not in picked_items:
+                    picked_items.add(name)
+                    return track 
+
 
 
 
@@ -45,31 +67,29 @@ def get_clip_quiz(request):
 
         if (len(data["items"]) < 4): 
             return JsonResponse({"error": "You do not have enough saved tracks to create a quiz. The minimum required is 5."})
-
+        
         response = {}
         questions = [] 
         test_bank = []
+        items = data["items"]
+        picked_items = set()
 
-        for item in data["items"]:
-            track = item["track"]
+        for i in range(5):
+            track = select_rand_no_duplicates(items, picked_items)
             question = {}
-
-            
 
             question["name"] = track["name"]
             question["clip_url"] = track["preview_url"] 
             question["options"] = generate_options(question["name"], data["items"])
 
-            if question["clip_url"] is not None:
-                questions.append(question)
-                test_bank.append(question["name"])
+            questions.append(question)
+            test_bank.append(question["name"])
 
         for question in questions:
             options = generate_options(question["name"], test_bank)
             question["options"] = options
+
                 
-
-
         response["questions"] = questions
 
         return JsonResponse(response, status=200)
