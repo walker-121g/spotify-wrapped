@@ -1,6 +1,5 @@
 import { useAuth } from "@/stores/auth.store";
 import { createFileRoute } from "@tanstack/react-router";
-
 import { RecentPosts } from "@/components/pages/feed/recent";
 import { FollowingPosts } from "@/components/pages/feed/following";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

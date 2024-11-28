@@ -26,7 +26,7 @@ export const AccountSettings = () => {
   return (
     <div className="w-full">
       <Card>
-        <CardHeader className="flex flex-row justify-between items-center">
+        <CardHeader className="flex flex-row justify-between items-center gap-2">
           <div className="flex flex-col gap-2">
             <CardTitle>Account Settings</CardTitle>
             <CardDescription>
