@@ -8,16 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-import {
-  Home,
-  User,
-  Search,
-  Mail,
-  Music,
-  Plus,
-  Settings,
-  Gamepad2,
-} from "lucide-react";
+import { Home, Music, Plus, Settings, Gamepad2 } from "lucide-react";
 
 export const NavLink = ({
   expanded,
