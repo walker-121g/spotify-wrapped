@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
 
-import { Menu, Settings, LogOut, User, Sun } from "lucide-react";
+import { Menu, Settings, LogOut, Sun } from "lucide-react";
 import { NavLinks } from "./links";
 
 export const Topbar = () => {
