@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { wrapSchema, WrapSchema } from "@/schemas/wrap.schema";
@@ -44,6 +44,7 @@ export const Route = createFileRoute("/app/wraps/new")({
 
 function NewWrapPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [users, setUsers] = useState<string[]>([]);
   const form = useForm<WrapSchema>({
@@ -76,6 +77,7 @@ function NewWrapPage() {
   useMemo(() => {
     if (isSuccess) {
       toast.success("Your wrap has successfully been created!");
+      queryClient.invalidateQueries({ queryKey: ["my", "wraps"] });
       setTimeout(() => {
         router.navigate({
           to: "/app/wraps",

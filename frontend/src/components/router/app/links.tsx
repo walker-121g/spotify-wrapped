@@ -8,7 +8,16 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
-import { Home, User, Search, Mail, Music, Plus, Settings, Gamepad2 } from "lucide-react";
+import {
+  Home,
+  User,
+  Search,
+  Mail,
+  Music,
+  Plus,
+  Settings,
+  Gamepad2,
+} from "lucide-react";
 
 export const NavLink = ({
   expanded,
@@ -58,27 +67,6 @@ export const NavLinks = ({ expanded }: { expanded: boolean }) => {
         href="/app"
         name="Home"
         icon={<Home />}
-      />
-      <NavLink
-        expanded={expanded}
-        locations={["/app/profile/", "/app/profile"]}
-        href="/app/profile"
-        name="My Profile"
-        icon={<User />}
-      />
-      <NavLink
-        expanded={expanded}
-        locations={["/app/search/", "/app/search"]}
-        href="/app/search"
-        name="Search"
-        icon={<Search />}
-      />
-      <NavLink
-        expanded={expanded}
-        locations={["/app/messages", "/app/messages/"]}
-        href="/app/messages"
-        name="Messages"
-        icon={<Mail />}
       />
       <NavLink
         expanded={expanded}

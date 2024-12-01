@@ -58,7 +58,7 @@ export const WrapSlides = ({ wrap }: { wrap: Wrap }) => {
   return (
     <div className="w-full flex flex-col gap-2">
       <h1 className="text-text text-md font-semibold">Wrap Slides</h1>
-      <Carousel className="w-3/4 sm:w-2/3 md:1/2 lg:w-1/3 min-h-[48rem] mx-auto my-8">
+      <Carousel className="w-full sm:w-2/3 md:w-[25rem] lg:w-[35rem] min-h-[48rem] mx-auto my-8">
         <CarouselContent>
           <CarouselItem>
             <WelcomeSlide wrap={wrap} />

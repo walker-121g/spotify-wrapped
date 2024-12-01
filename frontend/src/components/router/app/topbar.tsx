@@ -86,12 +86,6 @@ export const Topbar = () => {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to="/app/profile">
-                <User />
-                <span>Profile</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
               <Link to="/app/settings">
                 <Settings />
                 <span>Settings</span>

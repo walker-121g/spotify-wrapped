@@ -24,6 +24,7 @@ export type Post = {
 };
 
 export type PostDetail = Post & {
+  wrap_id: number;
   comments: {
     id: number;
     content: string;

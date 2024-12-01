@@ -22,7 +22,16 @@ export const WelcomeSlide = ({ wrap }: { wrap: Wrap }) => {
           Welcome to {wrap.name}
         </CardTitle>
         <CardDescription className="text-primary-foreground">
-          From 11/23/24 to 12/32/43
+          From{" "}
+          {new Date(
+            Date.parse(wrap.created_at) -
+              (wrap.period === "short_term"
+                ? 1000 * 60 * 60 * 24 * 7 * 4
+                : wrap.period === "medium_term"
+                  ? 1000 * 60 * 60 * 24 * 7 * 4 * 6
+                  : 1000 * 60 * 60 * 24 * 7 * 4 * 12),
+          ).toLocaleDateString()}{" "}
+          to {new Date(wrap.created_at).toLocaleDateString()}
         </CardDescription>
       </CardHeader>
     </Card>
