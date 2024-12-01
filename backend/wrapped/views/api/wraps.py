@@ -209,21 +209,15 @@ def create_wrap(request):
                 wrap_user.save()
 
                 for invite in data["users"]:
-                    try:
-                        invite_user = User.objects.get(email=invite)
-                        wrap_invite = WrapUser(
-                            user=invite_user, wrap=wrap, owner=False, accepted=False
-                        )
-                        wrap_invite.save()
-                    except User.DoesNotExist:
-                        return JsonResponse(
-                            {"error": f"User {invite} does not exist"}, status=400
-                        )
+                    invite_user = User.objects.get(email=invite)
+                    wrap_invite = WrapUser(
+                        user=invite_user, wrap=wrap, owner=False, accepted=False
+                    )
+                    wrap_invite.save()
 
                 top_tracks = get_top_tracks(data["period"], auth_header)
                 top_artists = get_top_artists(data["period"], auth_header)
 
-                # update wrap with track and artist count
                 wrap.track_count = len(top_tracks)
                 wrap.artist_count = len(top_artists)
                 wrap.save()
@@ -309,7 +303,7 @@ def accept_wrap(request):
             wrap_artist.save()
 
         for track in top_tracks[:100]:
-            wrap_track = WrapTrack(artist=track["id"], user=user, wrap=wrap, listen_time=0)
+            wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0)
             wrap_track.save()
 
         return JsonResponse({"success": True}, status=200)

@@ -27,7 +27,8 @@ def get_post(request):
                 'id': post.user.id,
                 'name': post.user.name,
                 'email': post.user.email
-            }
+            },
+            'wrap_id': post.wrap_id
         }
 
         for comment in comments:
