@@ -1,3 +1,4 @@
+import SafeError from "@/lib/safe-error";
 import { useAuth } from "@/stores/auth.store";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
@@ -69,19 +70,13 @@ export async function http<T>(
   } catch (error) {
     if (typeof error === "number" && error === 401) {
       console.log("[http service] caught reattempted auth error, logging out");
-      throw {
-        error: "You are not authenticated, please login again",
-      };
+      throw new SafeError("You are not authenticated, please login again");
     } else if (typeof error === "string") {
       console.log("[http service] caught supplied error:", error);
-      throw {
-        error,
-      };
+      throw new SafeError(error);
     } else {
       console.log("[http service] caught generic error");
-      throw {
-        error: "An unexpected error occurred, please try again later",
-      };
+      throw new SafeError("An unknown error occurred, please try again later");
     }
   }
 }

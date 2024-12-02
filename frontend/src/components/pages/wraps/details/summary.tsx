@@ -13,8 +13,10 @@ import {
 
 import { Wrap } from "@/services/types/wrap";
 import { Button } from "@/components/ui/button";
+import { useContext } from "@/stores/user.store";
 
 export const WrapSummary = ({ wrap }: { wrap: Wrap }) => {
+  const { user } = useContext();
   const { isLoading, isError, data } = useQuery({
     queryKey: ["wrap", "spotify", wrap.id],
     queryFn: async () => await getWrapInfo(wrap),
@@ -32,14 +34,16 @@ export const WrapSummary = ({ wrap }: { wrap: Wrap }) => {
         userCount > 1
           ? `
         Respond to the following prompt where '***' represents a line break and '_' surrounds text that should be bold. Add no other formatting.
-        Given the following Spotify Wrap JSON data, analyze and compare the music tastes of the users in this wrap. Highlight similarities, contrasts, and any shared trends. Make a prediction about how their tastes might influence group activities like music sharing or event planning. Suggest artists or genres they might all enjoy. 
+        The viewing user's name is ${user.display_name}, take that into account when responding.
+        Given the following Spotify Wrap JSON data, analyze and compare the music tastes of the users in this wrap. Highlight similarities, contrasts, and any shared trends. Make a prediction about how their tastes might influence group activities like music sharing or event planning. Suggest artists or genres they might all enjoy.
         WRAP: ${JSON.stringify(wrap)},
-        SPOTIFY_INFO: ${JSON.stringify(data!)}` // comparing multiple users
+        SPOTIFY_INFO: ${JSON.stringify(data!)}`
           : `
         Respond to the following prompt where '***' represents a line break and '_' surrounds text that should be bold. Add no other formatting.
+        The viewing user's name is ${user.display_name}, take that into account when responding.
         Given the following Spotify Wrap JSON data, curate an AI summary that explains what the listener's music tastes mean. Make a prediction about astrology signs, listening mood, and other artists the listener might like.
         WRAP: ${JSON.stringify(wrap)},
-        SPOTIFY_INFO: ${JSON.stringify(data!)}`; // just analyzing 1 user
+        SPOTIFY_INFO: ${JSON.stringify(data!)}`;
 
       return await getGeminiStory(prompt);
     },

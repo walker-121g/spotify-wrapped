@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -101,6 +101,9 @@ function PostPage() {
             {data.comments.length}
           </Button>
           <LikeButton id={data.id} count={data.likes} refetch={refetch} />
+          <Button asChild>
+            <Link to={`/app/wraps/${data.wrap_id}`}>Wrap Details</Link>
+          </Button>
         </CardFooter>
       </Card>
       <Comments post={data} refetch={refetch} />

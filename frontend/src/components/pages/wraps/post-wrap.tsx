@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -33,6 +33,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ExternalLink, Loader2 } from "lucide-react";
 
 export const PostWrap = ({ wrap }: { wrap: Wrap }) => {
+  const queryClient = useQueryClient();
+
   const [open, setOpen] = useState<boolean>(false);
 
   const form = useForm<PostSchema>({
@@ -60,6 +62,7 @@ export const PostWrap = ({ wrap }: { wrap: Wrap }) => {
     } else if (isSuccess) {
       form.reset();
       toast.success("Wrap posted successfully");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       setOpen(false);
     }
   }, [error, isSuccess]);

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
 
-import { Menu, Settings, LogOut, User, Sun } from "lucide-react";
+import { Menu, Settings, LogOut, Sun } from "lucide-react";
 import { NavLinks } from "./links";
 
 export const Topbar = () => {
@@ -85,12 +85,6 @@ export const Topbar = () => {
               <span>{theme.theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/app/profile">
-                <User />
-                <span>Profile</span>
-              </Link>
-            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/app/settings">
                 <Settings />
