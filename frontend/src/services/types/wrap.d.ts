@@ -14,6 +14,7 @@ export type Wrap = {
     id: string;
     track: string;
     listen_time: number;
+    priority: number;
     user: {
       id: number;
       email: string;
@@ -24,6 +25,7 @@ export type Wrap = {
     id: string;
     artist: string;
     listen_time: number;
+    priority: number;
     user: {
       id: number;
       email: string;

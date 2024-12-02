@@ -9,7 +9,7 @@ import SpotifyLogo from "@/assets/spotify.png";
 
 export const EndSlide = () => {
   return (
-    <Card className="w-full min-h-[48rem] px-8 bg-primary flex flex-col items-center justify-center">
+    <Card className="w-full min-h-[48rem] sm:px-8 bg-primary flex flex-col items-center justify-center">
       <CardHeader className="text-center">
         <img
           src={SpotifyLogo}

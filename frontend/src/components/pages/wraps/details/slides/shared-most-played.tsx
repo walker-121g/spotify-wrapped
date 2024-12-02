@@ -21,15 +21,15 @@ export const SharedMostPlayedSlide = ({
   const audioRef = useRef<HTMLVideoElement>(null);
 
   const commonTrack = info.tracks.find((track) =>
-    wrap.tracks.every((userTrack) => userTrack.track === track.id)
+    wrap.tracks.every((userTrack) => userTrack.track === track.id),
   );
 
   useEffect(() => {
-    if (inView) {
+    /*if (inView) {
       audioRef.current!.play();
     } else {
       audioRef.current!.pause();
-    }
+    }*/
   }, [inView]);
 
   if (!commonTrack) {
@@ -48,7 +48,7 @@ export const SharedMostPlayedSlide = ({
   }
 
   return (
-    <Card ref={ref} className="w-full min-h-[48rem] px-16 flex flex-col">
+    <Card ref={ref} className="w-full min-h-[48rem] sm:px-16 flex flex-col">
       <CardHeader className="flex flex-col gap-4 text-center">
         <CardTitle className="text-3xl font-bold my-24 animate-in">
           Most Played Song
