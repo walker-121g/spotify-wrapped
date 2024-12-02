@@ -113,11 +113,10 @@ function AboutPage() {
             </CardHeader>
             <CardContent>
               <CardDescription>
-                Hello, I'm Nathan. I have very little web dev experience and
-                have learned much with this project. On this project, I worked
-                on the review dialogue and added some backend functions
-                involving the reviews with assistance from my other group
-                members.
+                Hello, I'm Nathan. Prior to project 1, I had very little web dev
+                experience, but have learned a lot from the last two projects. I
+                worked on integrating the Gemini AI, some UI changes, and helped
+                write the boilerplate for unit tests.
               </CardDescription>
             </CardContent>
           </Card>
