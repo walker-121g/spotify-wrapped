@@ -6,6 +6,10 @@ from wrapped.models import User, Wrap, WrapUser, WrapArtist, WrapTrack
 from wrapped.utils.spotify.users import get_top_tracks, get_top_artists
 
 
+def sorter(o):
+    return o["priority"]
+
+
 @csrf_exempt
 def get_wrap(request):
     if request.method == "GET":
@@ -43,6 +47,7 @@ def get_wrap(request):
                     "id": artist.id,
                     "artist": artist.artist,
                     "listen_time": artist.listen_time,
+                    "priority": artist.priority,
                     "user": {
                         "id": artist.user.id,
                         "email": artist.user.email,
@@ -56,6 +61,7 @@ def get_wrap(request):
                     "id": track.id,
                     "track": track.track,
                     "listen_time": track.listen_time,
+                    "priority": track.priority,
                     "user": {
                         "id": track.user.id,
                         "email": track.user.email,
@@ -66,6 +72,9 @@ def get_wrap(request):
             ],
             "created_at": wrap[0].created_at,
         }
+
+        wrap_data["artists"].sort(key=sorter)
+        wrap_data["tracks"].sort(key=sorter)
 
         return JsonResponse(wrap_data, safe=False, status=200)
     else:
@@ -222,15 +231,19 @@ def create_wrap(request):
                 wrap.artist_count = len(top_artists)
                 wrap.save()
 
+                artist_index = 0
                 for artist in top_artists[:20]:
                     wrap_artist = WrapArtist(
-                        artist=artist["id"], user=user, wrap=wrap, listen_time=0
+                        artist=artist["id"], user=user, wrap=wrap, listen_time=0, priority=artist_index
                     )
                     wrap_artist.save()
+                    artist_index += 1
 
+                track_index = 0
                 for track in top_tracks[:100]:
-                    wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0)
+                    wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0, priority=track_index)
                     wrap_track.save()
+                    track_index += 1
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 
@@ -298,13 +311,19 @@ def accept_wrap(request):
         wrap.artist_count += len(top_artists)
         wrap.save()
 
+        artist_index = 0
         for artist in top_artists[:20]:
-            wrap_artist = WrapArtist(artist=artist["id"], user=user, wrap=wrap, listen_time=0)
+            wrap_artist = WrapArtist(
+                artist=artist["id"], user=user, wrap=wrap, listen_time=0, priority=artist_index
+            )
             wrap_artist.save()
+            artist_index += 1
 
+        track_index = 0
         for track in top_tracks[:100]:
-            wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0)
+            wrap_track = WrapTrack(track=track["id"], user=user, wrap=wrap, listen_time=0, priority=track_index)
             wrap_track.save()
+            track_index += 1
 
         return JsonResponse({"success": True}, status=200)
     else:

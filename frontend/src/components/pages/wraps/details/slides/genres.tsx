@@ -13,7 +13,7 @@ export const GenreSlide = ({ info }: { wrap: Wrap; info: WrapPreview }) => {
   const genres = info.artists.map((artist) => artist.genres).flat();
 
   return (
-    <Card className="w-full min-h-[48rem] px-16 flex flex-col">
+    <Card className="w-full min-h-[48rem] sm:px-16 flex flex-col">
       <CardHeader className="flex flex-col gap-4 text-center">
         <CardTitle className="text-3xl font-bold my-24 animate-in">
           You're a {genres[0]} fan!

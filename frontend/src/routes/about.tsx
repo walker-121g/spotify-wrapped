@@ -42,10 +42,9 @@ function AboutPage() {
               <CardDescription>
                 Hi, I’m Sam! With a limited background in web development and a
                 passion for continuous learning, I had the opportunity to dive
-                deep into authentication and backend functionality. Working with
-                an incredible team, we collaborated in real-time and grew
-                together, making this an enriching and impactful experience for
-                all of us!
+                deep into authentication and backend functionality. Working on a
+                large project like this has been a great learning experience and
+                I'm excited to see where I can apply it in the future!
               </CardDescription>
             </CardContent>
           </Card>
@@ -91,10 +90,10 @@ function AboutPage() {
             <CardContent>
               <CardDescription>
                 Hey I'm Romulus! I have experience building full-stack web
-                applications and other web based projects. On our project, I
-                created the favorites dialogue on the main page, fixed numerous
-                bugs, and troubleshooted issues my fellow group members were
-                having.
+                applications and other web based projects. On this project, I
+                created numerous back-end functions to interface with the
+                Spotify API, created the game "Clipquiz", and squashed some bugs
+                I found within our program.
               </CardDescription>
             </CardContent>
           </Card>

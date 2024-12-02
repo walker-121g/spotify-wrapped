@@ -19,7 +19,7 @@ function DemoPage() {
           website.
         </p>
         <iframe
-          className="w-4/5 md:w-1/2 md:h-96 rounded-md border"
+          className="w-screen sm:w-4/5 md:w-1/2 md:h-96 rounded-md border"
           src="https://drive.google.com/file/d/1P5HpPSiOGi_9nph4gASziA4WfgIbDqeN/preview"
           allow="autoplay"
         ></iframe>

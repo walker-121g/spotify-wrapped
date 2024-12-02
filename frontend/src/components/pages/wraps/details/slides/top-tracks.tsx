@@ -31,7 +31,7 @@ export const TopTracksSlide = ({ info }: { wrap: Wrap; info: WrapPreview }) => {
   }, [inView]);
 
   return (
-    <Card ref={ref} className="w-full min-h-[48rem] px-16 flex flex-col">
+    <Card ref={ref} className="w-full min-h-[48rem] sm:px-16 flex flex-col">
       <CardHeader className="flex flex-col gap-4 text-center">
         <CardTitle className="text-3xl font-bold mt-16 mb-4">
           Top 5 Tracks

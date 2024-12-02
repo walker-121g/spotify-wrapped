@@ -10,7 +10,7 @@ import {
 
 import { Wrap, WrapPreview } from "@/services/types/wrap";
 
-export const MostPlayedSlide = ({
+export const SharedMostPlayedSlide = ({
   wrap,
   info,
 }: {
@@ -19,48 +19,67 @@ export const MostPlayedSlide = ({
 }) => {
   const { ref, inView } = useInView();
   const audioRef = useRef<HTMLVideoElement>(null);
-  const spotify = info.tracks.find((t) => t.id === wrap.tracks[0].track)!;
+
+  const commonTrack = info.tracks.find((track) =>
+    wrap.tracks.every((userTrack) => userTrack.track === track.id),
+  );
 
   useEffect(() => {
-    if (inView) {
+    /*if (inView) {
       audioRef.current!.play();
     } else {
       audioRef.current!.pause();
-    }
+    }*/
   }, [inView]);
+
+  if (!commonTrack) {
+    return (
+      <Card ref={ref} className="w-full min-h-[48rem] px-16 flex flex-col">
+        <CardHeader className="flex flex-col gap-4 text-center">
+          <CardTitle className="text-3xl font-bold my-24 animate-in">
+            No Common Tracks
+          </CardTitle>
+          <CardDescription className="text-center px-8">
+            The users in this wrap do not have any common top tracks.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card ref={ref} className="w-full min-h-[48rem] sm:px-16 flex flex-col">
       <CardHeader className="flex flex-col gap-4 text-center">
         <CardTitle className="text-3xl font-bold my-24 animate-in">
-          Top Played Song
+          Most Played Song
         </CardTitle>
         <div className="w-full flex flex-row gap-2 items-center justify-center mt-16 mb-4">
           <img
-            src={spotify.album.images[0].url}
+            src={commonTrack.album.images[0].url}
             alt="Track Icon"
             className="w-1/5 rounded-full"
           />
           <img
-            src={spotify.album.images[0].url}
+            src={commonTrack.album.images[0].url}
             alt="Track Icon"
             className="w-1/3 rounded-full animate-[spin_10s_linear_infinite]"
           />
           <img
-            src={spotify.album.images[0].url}
+            src={commonTrack.album.images[0].url}
             alt="Track Icon"
             className="w-1/5 rounded-full rotate-180"
           />
         </div>
         <CardDescription className="text-center px-8">
-          Your most played song was {spotify.name} by {spotify.artists[0].name}
+          The most played song among users is <b>{commonTrack.name}</b> by{" "}
+          <b>{commonTrack.artists[0].name}</b>.
         </CardDescription>
         <CardDescription className="text-center px-8">
-          Album: {spotify.album.name}
+          Album: {commonTrack.album.name}
         </CardDescription>
       </CardHeader>
       <video ref={audioRef} hidden loop>
-        <source src={spotify.preview_url} />
+        <source src={commonTrack.preview_url} />
       </video>
     </Card>
   );
